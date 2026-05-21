@@ -7,711 +7,201 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="宅建600">
-<title>宅建600 - 勉強記録</title>
+<title>宅建600 - らっきょ&さき</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   :root {
-    --bg: #f5f1ea;
-    --bg-card: #ffffff;
-    --ink: #1a1d23;
-    --ink-soft: #5c5f66;
-    --ink-faint: #a0a4ab;
-    --accent: #c8463a;
-    --accent-soft: #e8c5c0;
-    --sub: #4a6741;
-    --gold: #b8893c;
-    --line: #e5dfd4;
-    --warn-bg: #fef3c7;
-    --warn-text: #92400e;
+    --bg: #f5f1ea; --bg-card: #ffffff; --ink: #1a1d23; --ink-soft: #5c5f66;
+    --ink-faint: #a0a4ab; --accent: #c8463a; --accent-soft: #e8c5c0;
+    --sub: #4a6741; --gold: #b8893c; --line: #e5dfd4;
+    --warn-bg: #fef3c7; --warn-text: #92400e;
     --shadow: 0 1px 3px rgba(26, 29, 35, 0.04), 0 2px 8px rgba(26, 29, 35, 0.04);
   }
-
   html, body { overscroll-behavior: none; }
   body {
-    font-family: 'Noto Serif JP', serif;
-    background: var(--bg);
-    color: var(--ink);
-    line-height: 1.5;
-    min-height: 100vh;
-    padding-bottom: 80px;
+    font-family: 'Noto Serif JP', serif; background: var(--bg); color: var(--ink);
+    line-height: 1.5; min-height: 100vh; padding-bottom: 80px;
     background-image:
       radial-gradient(circle at 20% 10%, rgba(200, 70, 58, 0.03) 0%, transparent 40%),
       radial-gradient(circle at 80% 60%, rgba(74, 103, 65, 0.03) 0%, transparent 40%);
   }
   .container { max-width: 480px; margin: 0 auto; padding: 20px 18px; }
 
-  /* モード選択画面 */
-  .mode-select {
-    min-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-  .mode-title {
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    color: var(--ink-soft);
-    margin-bottom: 6px;
-  }
-  .mode-brand {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
+  .mode-select { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .mode-title { font-size: 11px; letter-spacing: 0.3em; color: var(--ink-soft); margin-bottom: 6px; }
+  .mode-brand { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
   .mode-brand .num { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
-  .mode-sub {
-    font-size: 13px;
-    color: var(--ink-soft);
-    margin-bottom: 36px;
-  }
-  .mode-btn {
-    width: 280px;
-    padding: 18px;
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: var(--shadow);
-  }
+  .mode-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 36px; }
+  .mode-btn { width: 280px; padding: 18px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); }
   .mode-btn:active { transform: scale(0.98); }
-  .mode-btn-label {
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    color: var(--ink-faint);
-    margin-bottom: 4px;
-  }
-  .mode-btn-name {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 2px;
-  }
-  .mode-btn-desc {
-    font-size: 12px;
-    color: var(--ink-soft);
-  }
-  .mode-btn.yamada { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .mode-btn.yamada .mode-btn-label { color: var(--ink-faint); }
-  .mode-btn.yamada .mode-btn-name { color: var(--bg); }
-  .mode-btn.yamada .mode-btn-desc { color: var(--ink-faint); }
+  .mode-btn-label { font-size: 10px; letter-spacing: 0.3em; color: var(--ink-faint); margin-bottom: 4px; }
+  .mode-btn-name { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .mode-btn-desc { font-size: 12px; color: var(--ink-soft); }
+  .mode-btn.rakkyo { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .mode-btn.rakkyo .mode-btn-label { color: var(--ink-faint); }
+  .mode-btn.rakkyo .mode-btn-name { color: var(--bg); }
+  .mode-btn.rakkyo .mode-btn-desc { color: var(--ink-faint); }
   .mode-btn.saki { background: linear-gradient(135deg, #e8c5c0, #f5d4cf); border-color: transparent; }
 
-  /* ヘッダー */
-  header {
-    text-align: center;
-    padding: 12px 0 20px;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 20px;
-    position: relative;
-  }
-  .role-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 10px;
-    padding: 4px 10px;
-    border-radius: 12px;
-    background: var(--ink);
-    color: var(--bg);
-    letter-spacing: 0.1em;
-  }
+  header { text-align: center; padding: 12px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 20px; position: relative; }
+  .role-badge { position: absolute; top: 0; right: 0; font-size: 10px; padding: 4px 10px; border-radius: 12px; background: var(--ink); color: var(--bg); letter-spacing: 0.1em; }
   .role-badge.saki { background: var(--accent); }
-  .switch-btn {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 11px;
-    background: transparent;
-    border: 1px solid var(--line);
-    padding: 4px 10px;
-    border-radius: 12px;
-    color: var(--ink-soft);
-    cursor: pointer;
-  }
+  .switch-btn { position: absolute; top: 0; left: 0; font-size: 11px; background: transparent; border: 1px solid var(--line); padding: 4px 10px; border-radius: 12px; color: var(--ink-soft); cursor: pointer; }
   .title { font-size: 11px; letter-spacing: 0.3em; color: var(--ink-soft); margin-bottom: 4px; margin-top: 18px; }
   .brand { font-size: 24px; font-weight: 700; letter-spacing: 0.05em; }
   .brand .num { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
 
-  /* タブ */
-  .tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 20px;
-    background: var(--bg-card);
-    padding: 4px;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-  }
-  .tab {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--ink-soft);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 600;
-  }
+  .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: var(--bg-card); padding: 4px; border-radius: 12px; box-shadow: var(--shadow); }
+  .tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; color: var(--ink-soft); border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 600; }
   .tab.active { background: var(--ink); color: var(--bg); }
 
-  /* カード共通 */
-  .card {
-    background: var(--bg-card);
-    border-radius: 16px;
-    padding: 22px 20px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow);
-  }
-  .card-title {
-    font-size: 12px;
-    letter-spacing: 0.2em;
-    color: var(--ink-soft);
-    margin-bottom: 12px;
-  }
+  .card { background: var(--bg-card); border-radius: 16px; padding: 22px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .card-title { font-size: 12px; letter-spacing: 0.2em; color: var(--ink-soft); margin-bottom: 12px; }
 
-  /* サボり警告 */
-  .saboru-alert {
-    background: var(--warn-bg);
-    color: var(--warn-text);
-    border-radius: 16px;
-    padding: 16px 20px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow);
-    border-left: 4px solid var(--accent);
-  }
-  .saboru-title {
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .saboru-desc {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-  .saboru-actions {
-    display: flex;
-    gap: 8px;
-  }
-  .saboru-btn {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-  }
+  .saboru-alert { background: var(--warn-bg); color: var(--warn-text); border-radius: 16px; padding: 16px 20px; margin-bottom: 16px; box-shadow: var(--shadow); border-left: 4px solid var(--accent); }
+  .saboru-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .saboru-desc { font-size: 12px; margin-bottom: 10px; }
+  .saboru-actions { display: flex; gap: 8px; }
+  .saboru-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
   .saboru-btn.line { background: #06c755; color: white; }
   .saboru-btn.self { background: var(--ink); color: var(--bg); }
 
-  /* カウントダウン */
   .countdown-card { position: relative; overflow: hidden; }
-  .countdown-card::before {
-    content: '宅地建物取引士';
-    position: absolute;
-    top: 14px;
-    right: -10px;
-    transform: rotate(90deg);
-    transform-origin: top right;
-    font-size: 9px;
-    letter-spacing: 0.4em;
-    color: var(--ink-faint);
-  }
+  .countdown-card::before { content: '宅地建物取引士'; position: absolute; top: 14px; right: -10px; transform: rotate(90deg); transform-origin: top right; font-size: 9px; letter-spacing: 0.4em; color: var(--ink-faint); }
   .exam-label { font-size: 11px; letter-spacing: 0.2em; color: var(--ink-soft); margin-bottom: 8px; }
   .exam-date { font-size: 14px; color: var(--ink); margin-bottom: 16px; }
   .days-left { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
-  .days-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 56px;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
+  .days-num { font-family: 'JetBrains Mono', monospace; font-size: 56px; font-weight: 700; color: var(--accent); line-height: 1; letter-spacing: -0.02em; }
   .days-unit { font-size: 16px; color: var(--ink-soft); }
   .days-sub { font-size: 12px; color: var(--ink-faint); }
 
-  /* 進捗カード */
-  .progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 16px;
-  }
+  .progress-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
   .progress-title { font-size: 12px; letter-spacing: 0.2em; color: var(--ink-soft); }
   .progress-pct { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; }
-  .progress-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--line);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 14px;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--sub), var(--accent));
-    border-radius: 4px;
-    transition: width 0.6s ease;
-  }
-  .progress-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    font-size: 11px;
-  }
+  .progress-bar { width: 100%; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sub), var(--accent)); border-radius: 4px; transition: width 0.6s ease; }
+  .progress-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 11px; }
   .stat { text-align: center; }
   .stat-label { color: var(--ink-faint); margin-bottom: 4px; letter-spacing: 0.1em; }
   .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600; }
   .stat-value.accent { color: var(--accent); }
   .stat-value.sub { color: var(--sub); }
-  .pace-note {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px dashed var(--line);
-    font-size: 12px;
-    color: var(--ink-soft);
-    text-align: center;
-  }
-  .pace-note strong {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--ink);
-    font-weight: 700;
-  }
+  .pace-note { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 12px; color: var(--ink-soft); text-align: center; }
+  .pace-note strong { font-family: 'JetBrains Mono', monospace; color: var(--ink); font-weight: 700; }
 
-  /* タイマー */
-  .timer-card {
-    background: var(--ink);
-    color: var(--bg);
-    border-radius: 16px;
-    padding: 28px 20px;
-    margin-bottom: 16px;
-    text-align: center;
-    box-shadow: var(--shadow);
-  }
+  .timer-card { background: var(--ink); color: var(--bg); border-radius: 16px; padding: 28px 20px; margin-bottom: 16px; text-align: center; box-shadow: var(--shadow); }
   .timer-label { font-size: 11px; letter-spacing: 0.3em; color: var(--ink-faint); margin-bottom: 12px; }
-  .timer-display {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 48px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    margin-bottom: 18px;
-    color: var(--bg);
-  }
+  .timer-display { font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 500; letter-spacing: 0.02em; margin-bottom: 18px; color: var(--bg); }
   .timer-display.running { color: var(--accent-soft); }
   .timer-buttons { display: flex; gap: 8px; justify-content: center; }
-  .btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 24px;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.05em;
-  }
+  .btn { padding: 12px 20px; border: none; border-radius: 24px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.05em; }
   .btn-primary { background: var(--accent); color: white; flex: 1; }
   .btn-primary:active { transform: scale(0.97); }
-  .btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--bg);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
+  .btn-secondary { background: rgba(255, 255, 255, 0.1); color: var(--bg); border: 1px solid rgba(255, 255, 255, 0.2); }
   .btn-save { background: var(--sub); color: white; flex: 1; }
 
-  /* 手動入力 */
   .input-row { display: flex; gap: 8px; align-items: center; }
-  .input-group {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    background: var(--bg);
-    border-radius: 10px;
-    padding: 0 12px;
-  }
-  .input-group input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    padding: 12px 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 16px;
-    color: var(--ink);
-    outline: none;
-    text-align: center;
-  }
+  .input-group { flex: 1; display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 0 12px; }
+  .input-group input { flex: 1; border: none; background: transparent; padding: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--ink); outline: none; text-align: center; }
   .input-unit { font-size: 12px; color: var(--ink-soft); }
-  .input-add {
-    background: var(--ink);
-    color: var(--bg);
-    border: none;
-    padding: 12px 18px;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-  }
+  .input-add { background: var(--ink); color: var(--bg); border: none; padding: 12px 18px; border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
 
-  /* 記録リスト */
-  .records-title {
-    font-size: 12px;
-    letter-spacing: 0.2em;
-    color: var(--ink-soft);
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .record-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: 13px;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
+  .category-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .category-tag { padding: 6px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; font-size: 12px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .category-tag.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .category-add-input { width: 90px; padding: 6px 10px; border: 1px dashed var(--line); border-radius: 16px; font-size: 12px; background: transparent; outline: none; font-family: inherit; }
+
+  .records-title { font-size: 12px; letter-spacing: 0.2em; color: var(--ink-soft); margin-bottom: 12px; }
+  .record-item { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
   .record-item:last-child { border-bottom: none; }
-  .record-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  .record-date { color: var(--ink-soft); }
-  .record-time { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
-  .record-delete {
-    background: none;
-    border: none;
-    color: var(--ink-faint);
-    font-size: 16px;
-    cursor: pointer;
-    padding: 0 6px;
-  }
-  .record-reactions {
-    width: 100%;
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    padding-left: 0;
-    margin-top: 2px;
-  }
-  .reaction-chip {
-    background: var(--bg);
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
+  .record-main { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .record-date { color: var(--ink-soft); min-width: 46px; }
+  .record-category { font-size: 11px; background: var(--bg); padding: 2px 8px; border-radius: 10px; color: var(--ink-soft); }
+  .record-time { font-family: 'JetBrains Mono', monospace; font-weight: 600; margin-left: auto; }
+  .record-delete { background: none; border: none; color: var(--ink-faint); font-size: 16px; cursor: pointer; padding: 0 6px; }
+  .record-reactions { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .reaction-chip { background: var(--bg); padding: 4px 8px; border-radius: 10px; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; max-width: 100%; flex-wrap: wrap; }
+  .reaction-chip img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
   .reaction-emoji { font-size: 14px; }
-  .reaction-msg { font-size: 11px; color: var(--ink-soft); }
-  .empty {
-    text-align: center;
-    color: var(--ink-faint);
-    font-size: 13px;
-    padding: 20px 0;
-  }
+  .reaction-msg { font-size: 11px; color: var(--ink-soft); word-break: break-word; }
+  .empty { text-align: center; color: var(--ink-faint); font-size: 13px; padding: 20px 0; }
 
-  /* さきちゃんモード */
-  .saki-header {
-    background: linear-gradient(135deg, #e8c5c0, #f5d4cf);
-    border-radius: 16px;
-    padding: 22px 20px;
-    margin-bottom: 16px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
-  }
-  .saki-header::after {
-    content: '✦';
-    position: absolute;
-    top: 14px;
-    right: 18px;
-    font-size: 14px;
-    color: var(--accent);
-    opacity: 0.5;
-  }
+  .saki-header { background: linear-gradient(135deg, #e8c5c0, #f5d4cf); border-radius: 16px; padding: 22px 20px; margin-bottom: 16px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+  .saki-header::after { content: '✦'; position: absolute; top: 14px; right: 18px; font-size: 14px; color: var(--accent); opacity: 0.5; }
   .saki-label { font-size: 11px; letter-spacing: 0.3em; color: var(--accent); margin-bottom: 6px; }
   .saki-title { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
   .saki-sub { font-size: 12px; color: var(--ink-soft); }
 
-  /* さきちゃん用記録カード */
-  .saki-record {
-    background: var(--bg-card);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    box-shadow: var(--shadow);
-  }
-  .saki-record-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 10px;
-  }
+  .saki-record { background: var(--bg-card); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--shadow); }
+  .saki-record-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
   .saki-record-date { font-size: 12px; color: var(--ink-soft); }
-  .saki-record-hours {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-  .reaction-buttons {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .react-btn {
-    background: var(--bg);
-    border: 1px solid var(--line);
-    padding: 6px 12px;
-    border-radius: 18px;
-    font-size: 16px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-  }
+  .saki-record-hours { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--accent); }
+  .reaction-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+  .react-btn { background: var(--bg); border: 1px solid var(--line); padding: 6px 12px; border-radius: 18px; font-size: 16px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
   .react-btn:active { transform: scale(0.95); background: var(--accent-soft); }
-  .react-btn.reacted {
-    background: var(--accent-soft);
-    border-color: var(--accent);
-  }
-  .reaction-shown {
-    margin-top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-  .saki-message-input {
-    width: 100%;
-    margin-top: 8px;
-    padding: 8px 10px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 12px;
-    background: var(--bg);
-    outline: none;
-  }
-  .saki-message-send {
-    margin-top: 6px;
-    width: 100%;
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-  }
+  .react-btn.reacted { background: var(--accent-soft); border-color: var(--accent); }
+  .reaction-shown { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .saki-message-input { width: 100%; margin-top: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-family: inherit; font-size: 12px; background: var(--bg); outline: none; }
+  .photo-buttons { display: flex; gap: 6px; margin-top: 6px; }
+  .photo-btn { flex: 1; background: var(--bg); border: 1px solid var(--line); padding: 8px; border-radius: 8px; font-family: inherit; font-size: 11px; cursor: pointer; color: var(--ink-soft); text-align: center; }
+  .saki-message-send { margin-top: 6px; width: 100%; background: var(--accent); color: white; border: none; padding: 8px; border-radius: 8px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .photo-preview { margin-top: 8px; max-width: 120px; max-height: 120px; border-radius: 8px; display: block; }
+  .photo-cancel { font-size: 11px; color: var(--accent); cursor: pointer; margin-top: 4px; display: inline-block; }
 
-  /* メッセージ */
-  .message-input {
-    width: 100%;
-    min-height: 70px;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 14px;
-    background: var(--bg);
-    color: var(--ink);
-    resize: vertical;
-    outline: none;
-  }
+  .message-input { width: 100%; min-height: 70px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; font-family: inherit; font-size: 14px; background: var(--bg); color: var(--ink); resize: vertical; outline: none; }
   .message-input:focus { border-color: var(--accent); }
-  .message-save {
-    margin-top: 8px;
-    width: 100%;
-    background: var(--ink);
-    color: var(--bg);
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-  }
+  .message-save { margin-top: 8px; width: 100%; background: var(--ink); color: var(--bg); border: none; padding: 10px; border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
   .message-list { margin-top: 12px; }
-  .message-item {
-    background: var(--bg);
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    font-size: 13px;
-    position: relative;
-  }
-  .message-from {
-    font-size: 10px;
-    color: var(--accent);
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    margin-bottom: 2px;
-  }
-  .message-meta {
-    font-size: 10px;
-    color: var(--ink-faint);
-    margin-bottom: 4px;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .message-text {
-    color: var(--ink);
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .message-delete {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: none;
-    border: none;
-    color: var(--ink-faint);
-    font-size: 14px;
-    cursor: pointer;
-  }
+  .message-item { background: var(--bg); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; position: relative; }
+  .message-from { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 2px; }
+  .message-meta { font-size: 10px; color: var(--ink-faint); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+  .message-text { color: var(--ink); white-space: pre-wrap; word-break: break-word; }
 
-  /* ご褒美 */
-  .reward-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px dashed var(--line);
-  }
-  .reward-item:last-child { border-bottom: none; }
-  .reward-hours {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--accent);
-    min-width: 50px;
-  }
-  .reward-text { flex: 1; font-size: 13px; color: var(--ink); }
-  .reward-text.unlocked { color: var(--sub); }
-  .reward-status {
-    font-size: 11px;
-    padding: 4px 8px;
-    border-radius: 12px;
-    background: var(--line);
-    color: var(--ink-faint);
-    font-weight: 600;
-  }
-  .reward-status.unlocked { background: var(--sub); color: white; }
-
-  /* LINE送信 */
-  .line-section {
-    background: #06c755;
-    color: white;
-    border-radius: 16px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow);
-  }
+  .line-section { background: #06c755; color: white; border-radius: 16px; padding: 18px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
   .line-title { font-size: 12px; letter-spacing: 0.2em; margin-bottom: 4px; opacity: 0.9; }
   .line-desc { font-size: 11px; opacity: 0.85; margin-bottom: 12px; }
-  .line-btn {
-    width: 100%;
-    background: white;
-    color: #06c755;
-    border: none;
-    padding: 12px;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-  }
+  .line-btn { width: 100%; background: white; color: #06c755; border: none; padding: 12px; border-radius: 10px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .partner-card { background: linear-gradient(135deg, #fff5f3, #fef0ec); border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .partner-title { font-size: 11px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 6px; }
+  .partner-stats { display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+  .partner-stat { font-size: 12px; color: var(--ink-soft); }
+  .partner-stat strong { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--ink); font-weight: 700; margin: 0 2px; }
 
   .hidden { display: none !important; }
+  .loading { text-align: center; padding: 40px 0; color: var(--ink-faint); font-size: 13px; }
+  .loading::after { content: '...'; animation: dots 1.4s infinite; }
+  @keyframes dots { 0%, 20% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
 
-  /* ローディング */
-  .loading {
-    text-align: center;
-    padding: 40px 0;
-    color: var(--ink-faint);
-    font-size: 13px;
-  }
-  .loading::after {
-    content: '...';
-    animation: dots 1.4s infinite;
-  }
-  @keyframes dots {
-    0%, 20% { opacity: 0.2; }
-    50% { opacity: 1; }
-    100% { opacity: 0.2; }
-  }
-
-  /* トースト */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--ink);
-    color: var(--bg);
-    padding: 12px 20px;
-    border-radius: 24px;
-    font-size: 13px;
-    font-weight: 600;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
-    z-index: 100;
-    max-width: 90%;
-    text-align: center;
-  }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: var(--bg); padding: 12px 20px; border-radius: 24px; font-size: 13px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: transform 0.3s ease; z-index: 100; max-width: 90%; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- モード選択画面 -->
 <div class="container" id="mode-screen">
   <div class="mode-select">
     <div class="mode-title">T A K K E N　2 0 2 6</div>
     <div class="mode-brand">宅建 <span class="num">600</span></div>
     <div class="mode-sub">あなたはどちら？</div>
-    <button class="mode-btn yamada" data-role="yamada">
+    <button class="mode-btn rakkyo" data-role="rakkyo">
       <div class="mode-btn-label">R A K K Y O</div>
       <div class="mode-btn-name">らっきょ</div>
-      <div class="mode-btn-desc">勉強記録するモード</div>
+      <div class="mode-btn-desc">宅建勉強モード</div>
     </button>
     <button class="mode-btn saki" data-role="saki">
-      <div class="mode-btn-label">W A T C H E R</div>
+      <div class="mode-btn-label">S A K I</div>
       <div class="mode-btn-name">さきちゃん</div>
-      <div class="mode-btn-desc">監視・応援するモード</div>
+      <div class="mode-btn-desc">自分のことやる + 監視モード</div>
     </button>
   </div>
 </div>
 
-<!-- らっきょモード -->
-<div class="container hidden" id="yamada-screen">
-
+<div class="container hidden" id="rakkyo-screen">
   <header>
     <button class="switch-btn" onclick="switchRole()">切替</button>
     <span class="role-badge">らっきょ</span>
@@ -724,10 +214,15 @@
     <div class="tab" data-tab="saki">さきちゃんルーム</div>
   </div>
 
-  <div id="yamada-tab-study">
-
-    <!-- サボり警告(動的) -->
+  <div id="rakkyo-tab-study">
     <div id="saboru-alert" class="hidden"></div>
+
+    <div class="partner-card">
+      <div class="partner-title">S A K I 's　T O D A Y</div>
+      <div class="partner-stats" id="partner-stats-rakkyo">
+        <span class="partner-stat">読み込み中...</span>
+      </div>
+    </div>
 
     <div class="card countdown-card">
       <div class="exam-label">E X A M　D A T E</div>
@@ -744,26 +239,13 @@
         <div class="progress-title">P R O G R E S S</div>
         <div class="progress-pct" id="progress-pct">0%</div>
       </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width: 0%"></div></div>
       <div class="progress-stats">
-        <div class="stat">
-          <div class="stat-label">合計</div>
-          <div class="stat-value sub" id="total-hours">0.0h</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">残り</div>
-          <div class="stat-value accent" id="remain-hours">600.0h</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">今日</div>
-          <div class="stat-value" id="today-hours">0.0h</div>
-        </div>
+        <div class="stat"><div class="stat-label">合計</div><div class="stat-value sub" id="total-hours">0.0h</div></div>
+        <div class="stat"><div class="stat-label">残り</div><div class="stat-value accent" id="remain-hours">600.0h</div></div>
+        <div class="stat"><div class="stat-label">今日</div><div class="stat-value" id="today-hours">0.0h</div></div>
       </div>
-      <div class="pace-note">
-        必要ペース: <strong id="pace-needed">—</strong> / 日
-      </div>
+      <div class="pace-note">必要ペース: <strong id="pace-needed">—</strong> / 日</div>
     </div>
 
     <div class="timer-card">
@@ -794,168 +276,169 @@
     </div>
 
     <div class="card">
-      <div class="records-title">
-        <span>R E C O R D S</span>
-      </div>
-      <div id="records-list">
-        <div class="loading">読み込み中</div>
-      </div>
+      <div class="records-title">R E C O R D S</div>
+      <div id="records-list"><div class="loading">読み込み中</div></div>
     </div>
-
   </div>
 
-  <div id="yamada-tab-saki" class="hidden">
-
+  <div id="rakkyo-tab-saki" class="hidden">
     <div class="saki-header">
       <div class="saki-label">F R O M　S A K I</div>
       <div class="saki-title">さきちゃんからのメッセージ</div>
-      <div class="saki-sub">監視員からの応援・喝</div>
+      <div class="saki-sub">7日で自動削除されます</div>
     </div>
 
     <div class="card">
       <div class="card-title">M E S S A G E S</div>
-      <div id="yamada-messages">
-        <div class="loading">読み込み中</div>
+      <div id="rakkyo-messages"><div class="loading">読み込み中</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">S A K I 's　A C T I V I T Y</div>
+      <div style="font-size: 11px; color: var(--ink-faint); margin-bottom: 10px;">さきちゃんが何やってるか</div>
+      <div id="saki-activity-summary"></div>
+      <div id="saki-activity-records"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container hidden" id="saki-screen">
+  <header>
+    <button class="switch-btn" onclick="switchRole()">切替</button>
+    <span class="role-badge saki">さきちゃん</span>
+    <div class="title">S A K I 's　S P A C E</div>
+    <div class="brand">さきちゃんの場所</div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="saki-self">自分の記録</div>
+    <div class="tab" data-tab="saki-watch">らっきょ監視</div>
+  </div>
+
+  <div id="saki-tab-self">
+    <div class="partner-card">
+      <div class="partner-title">R A K K Y O 's　T O D A Y</div>
+      <div class="partner-stats" id="partner-stats-saki">
+        <span class="partner-stat">読み込み中...</span>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">R E W A R D S</div>
-      <div id="rewards-list"></div>
-    </div>
-
-  </div>
-
-</div>
-
-<!-- さきちゃんモード -->
-<div class="container hidden" id="saki-screen">
-
-  <header>
-    <button class="switch-btn" onclick="switchRole()">切替</button>
-    <span class="role-badge saki">さきちゃん</span>
-    <div class="title">W A T C H E R　M O D E</div>
-    <div class="brand">らっきょ監視所</div>
-  </header>
-
-  <!-- サボり警告 -->
-  <div id="saki-saboru-alert" class="hidden"></div>
-
-  <div class="card">
-    <div class="progress-header">
-      <div class="progress-title">らっきょの進捗</div>
-      <div class="progress-pct" id="saki-progress-pct">0%</div>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="saki-progress-fill" style="width: 0%"></div>
-    </div>
-    <div class="progress-stats">
-      <div class="stat">
-        <div class="stat-label">合計</div>
-        <div class="stat-value sub" id="saki-total-hours">0.0h</div>
+      <div class="card-title">M Y　A C T I V I T Y</div>
+      <div style="font-size: 11px; color: var(--ink-faint); margin-bottom: 12px;">
+        好きな活動を記録できるよ(読書、運動、勉強、なんでも)
       </div>
-      <div class="stat">
-        <div class="stat-label">残り日数</div>
-        <div class="stat-value accent" id="saki-days-left">—</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">今日</div>
-        <div class="stat-value" id="saki-today-hours">0.0h</div>
+      <div class="category-tags" id="category-tags"></div>
+      <div class="input-row" style="margin-top: 10px;">
+        <div class="input-group">
+          <input type="number" id="saki-hours" placeholder="0" min="0" step="0.1">
+          <span class="input-unit">時間</span>
+        </div>
+        <button class="input-add" id="saki-activity-add">追加</button>
       </div>
     </div>
-  </div>
 
-  <div class="card">
-    <div class="card-title">らっきょへメッセージを送る</div>
-    <textarea class="message-input" id="saki-msg-text" placeholder="応援、喝、なんでも…"></textarea>
-    <button class="message-save" id="saki-msg-send">送信する</button>
-  </div>
-
-  <div class="card">
-    <div class="card-title">R E C O R D S　&　R E A C T I O N</div>
-    <div style="font-size: 11px; color: var(--ink-faint); margin-bottom: 10px;">
-      勉強記録にリアクション・コメントできるよ
-    </div>
-    <div id="saki-records-list">
-      <div class="loading">読み込み中</div>
+    <div class="card">
+      <div class="card-title">M Y　R E C O R D S</div>
+      <div id="saki-my-records"><div class="loading">読み込み中</div></div>
     </div>
   </div>
 
+  <div id="saki-tab-watch" class="hidden">
+    <div id="saki-saboru-alert" class="hidden"></div>
+
+    <div class="card">
+      <div class="progress-header">
+        <div class="progress-title">らっきょの進捗</div>
+        <div class="progress-pct" id="saki-progress-pct">0%</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="saki-progress-fill" style="width: 0%"></div></div>
+      <div class="progress-stats">
+        <div class="stat"><div class="stat-label">合計</div><div class="stat-value sub" id="saki-total-hours">0.0h</div></div>
+        <div class="stat"><div class="stat-label">残り日数</div><div class="stat-value accent" id="saki-days-left">—</div></div>
+        <div class="stat"><div class="stat-label">今日</div><div class="stat-value" id="saki-today-hours">0.0h</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">らっきょへメッセージを送る</div>
+      <div style="font-size: 10px; color: var(--ink-faint); margin-bottom: 8px;">7日で自動削除されます</div>
+      <textarea class="message-input" id="saki-msg-text" placeholder="応援、喝、なんでも…"></textarea>
+      <button class="message-save" id="saki-msg-send">送信する</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">R E C O R D S　&　R E A C T I O N</div>
+      <div style="font-size: 11px; color: var(--ink-faint); margin-bottom: 10px;">
+        絵文字・コメント・写真でリアクション可(48時間で自動削除)
+      </div>
+      <div id="saki-records-list"><div class="loading">読み込み中</div></div>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  // ========== Supabase 初期化 ==========
   const SUPABASE_URL = 'https://tsromnwejzanfboeminq.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcm9tbndlanphbmZib2VtaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMzc4MDcsImV4cCI6MjA5NDkxMzgwN30.GKaO7VUj4Rd5vxQ-FvSFjO8QmxuBUyKAdeohm3c1lps';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ========== 試験日 ==========
   const EXAM_DATE = new Date(2026, 9, 14);
   const TARGET_HOURS = 600;
+  const DEFAULT_CATEGORIES = ['読書', '勉強', '運動', '仕事', '創作'];
+  const CATEGORY_EMOJIS = { '読書':'📖', '勉強':'📚', '運動':'🏃', '仕事':'💼', '創作':'🎨' };
 
-  // ========== ご褒美(ローカル保存) ==========
-  const REWARDS = [
-    { hours: 50, text: 'デート行く' },
-    { hours: 100, text: 'ちょっといいご飯' },
-    { hours: 200, text: '欲しかった本を買う' },
-    { hours: 400, text: '小旅行' },
-    { hours: 600, text: '試験合格祝い 🎉' }
-  ];
+  let records = [], reactions = [], messages = [], activities = [];
+  let selectedCategory = '読書';
+  const pendingPhotos = {};
 
-  // ========== ロール管理 ==========
-  function getRole() {
-    return localStorage.getItem('takken_role');
-  }
-  function setRole(role) {
-    localStorage.setItem('takken_role', role);
-    showRoleScreen(role);
-  }
+  function getRole() { return localStorage.getItem('takken_role'); }
+  function setRole(role) { localStorage.setItem('takken_role', role); showRoleScreen(role); }
   function switchRole() {
-    if (confirm('モードを切り替えますか？')) {
-      localStorage.removeItem('takken_role');
-      location.reload();
-    }
+    if (confirm('モードを切り替えますか？')) { localStorage.removeItem('takken_role'); location.reload(); }
   }
   function showRoleScreen(role) {
     document.getElementById('mode-screen').classList.add('hidden');
-    document.getElementById('yamada-screen').classList.toggle('hidden', role !== 'yamada');
+    document.getElementById('rakkyo-screen').classList.toggle('hidden', role !== 'rakkyo');
     document.getElementById('saki-screen').classList.toggle('hidden', role !== 'saki');
-    if (role === 'yamada') initYamada();
+    if (role === 'rakkyo') initRakkyo();
     else if (role === 'saki') initSaki();
   }
-
-  // モード選択ボタン
-  document.querySelectorAll('.mode-btn').forEach(btn => {
-    btn.addEventListener('click', () => setRole(btn.dataset.role));
-  });
-
-  // ========== データ取得 ==========
-  let records = [];
-  let reactions = [];
-  let messages = [];
+  window.switchRole = switchRole;
 
   async function fetchAll() {
     try {
-      const [r1, r2, r3] = await Promise.all([
+      sb.rpc('cleanup_old_data').then(() => {}).catch(() => {});
+      const [r1, r2, r3, r4] = await Promise.all([
         sb.from('records').select('*').order('created_at', { ascending: false }),
         sb.from('reactions').select('*').order('created_at', { ascending: false }),
-        sb.from('messages').select('*').order('created_at', { ascending: false })
+        sb.from('messages').select('*').order('created_at', { ascending: false }),
+        sb.from('activities').select('*').order('created_at', { ascending: false })
       ]);
       records = r1.data || [];
       reactions = r2.data || [];
       messages = r3.data || [];
-    } catch (e) {
-      console.error(e);
-      showToast('データ取得に失敗');
-    }
+      activities = r4.data || [];
+    } catch (e) { console.error(e); showToast('データ取得に失敗'); }
   }
 
   function totalHours() { return records.reduce((s, r) => s + parseFloat(r.hours), 0); }
   function todayHours() {
     const today = new Date().toISOString().slice(0, 10);
     return records.filter(r => r.date === today).reduce((s, r) => s + parseFloat(r.hours), 0);
+  }
+  function sakiTodayHours() {
+    const today = new Date().toISOString().slice(0, 10);
+    return activities.filter(a => a.who === 'saki' && a.date === today).reduce((s, a) => s + parseFloat(a.hours), 0);
+  }
+  function sakiTodayByCategory() {
+    const today = new Date().toISOString().slice(0, 10);
+    const map = {};
+    activities.filter(a => a.who === 'saki' && a.date === today).forEach(a => {
+      map[a.category] = (map[a.category] || 0) + parseFloat(a.hours);
+    });
+    return map;
   }
   function daysLeft() {
     const now = new Date();
@@ -970,18 +453,16 @@
     }, 0);
     return (Date.now() - latest) / (1000 * 60 * 60);
   }
+  function getCategoryEmoji(cat) { return CATEGORY_EMOJIS[cat] || '⭐'; }
 
-  // ========== らっきょモード ==========
-  async function initYamada() {
+  // ============ らっきょモード ============
+  async function initRakkyo() {
     await fetchAll();
-    updateYamadaUI();
-    setInterval(async () => {
-      await fetchAll();
-      updateYamadaUI();
-    }, 30000);
+    updateRakkyoUI();
+    setInterval(async () => { await fetchAll(); updateRakkyoUI(); }, 30000);
   }
 
-  function updateYamadaUI() {
+  function updateRakkyoUI() {
     const total = totalHours();
     const today = todayHours();
     const remain = Math.max(0, TARGET_HOURS - total);
@@ -996,13 +477,53 @@
     document.getElementById('today-hours').textContent = today.toFixed(1) + 'h';
     document.getElementById('progress-pct').textContent = pct.toFixed(1) + '%';
     document.getElementById('progress-fill').style.width = pct + '%';
-    document.getElementById('pace-needed').textContent =
-      (remain / Math.max(1, days)).toFixed(2) + 'h';
+    document.getElementById('pace-needed').textContent = (remain / Math.max(1, days)).toFixed(2) + 'h';
 
-    renderYamadaRecords();
-    renderYamadaMessages();
-    renderRewards(total);
+    renderPartnerSummaryRakkyo();
+    renderRakkyoRecords();
+    renderRakkyoMessages();
+    renderSakiActivityForRakkyo();
     renderSaboruAlert();
+  }
+
+  function renderPartnerSummaryRakkyo() {
+    const el = document.getElementById('partner-stats-rakkyo');
+    const total = sakiTodayHours();
+    const byCat = sakiTodayByCategory();
+    if (total === 0) {
+      el.innerHTML = '<span class="partner-stat">さきちゃんはまだ今日記録してないよ</span>';
+    } else {
+      const cats = Object.entries(byCat).map(([k, v]) => `${getCategoryEmoji(k)}${k} ${v.toFixed(1)}h`).join('・');
+      el.innerHTML = `<span class="partner-stat">合計 <strong>${total.toFixed(1)}h</strong></span>` +
+                     `<span class="partner-stat">${cats}</span>`;
+    }
+  }
+
+  function renderSakiActivityForRakkyo() {
+    const sumEl = document.getElementById('saki-activity-summary');
+    const listEl = document.getElementById('saki-activity-records');
+    const sakiAct = activities.filter(a => a.who === 'saki');
+    if (sakiAct.length === 0) {
+      sumEl.innerHTML = '';
+      listEl.innerHTML = '<div class="empty">まだ記録ありません</div>';
+      return;
+    }
+    const byCat = {};
+    sakiAct.forEach(a => { byCat[a.category] = (byCat[a.category] || 0) + parseFloat(a.hours); });
+    sumEl.innerHTML = '<div class="record-reactions" style="margin-bottom: 12px;">' +
+      Object.entries(byCat).map(([k, v]) =>
+        `<span class="reaction-chip"><span class="reaction-emoji">${getCategoryEmoji(k)}</span> ${escapeHtml(k)} <strong style="font-family:'JetBrains Mono',monospace;">${v.toFixed(1)}h</strong></span>`
+      ).join('') + '</div>';
+
+    listEl.innerHTML = sakiAct.slice(0, 10).map(a => `
+      <div class="record-item">
+        <div class="record-main">
+          <span class="record-date">${formatDate(a.date)}</span>
+          <span class="record-category">${getCategoryEmoji(a.category)} ${escapeHtml(a.category)}</span>
+          <span class="record-time">${parseFloat(a.hours).toFixed(1)} h</span>
+        </div>
+      </div>
+    `).join('');
   }
 
   function renderSaboruAlert() {
@@ -1025,7 +546,7 @@
     }
   }
 
-  function renderYamadaRecords() {
+  function renderRakkyoRecords() {
     const list = document.getElementById('records-list');
     if (records.length === 0) {
       list.innerHTML = '<div class="empty">まだ記録がありません</div>';
@@ -1039,6 +560,7 @@
             <span class="reaction-chip">
               <span class="reaction-emoji">${escapeHtml(re.emoji)}</span>
               ${re.message ? `<span class="reaction-msg">${escapeHtml(re.message)}</span>` : ''}
+              ${re.photo_data ? `<img src="${re.photo_data}" alt="">` : ''}
             </span>
           `).join('')}
         </div>
@@ -1048,7 +570,7 @@
           <div class="record-main">
             <span class="record-date">${formatDate(r.date)}</span>
             <span class="record-time">${parseFloat(r.hours).toFixed(1)} h</span>
-            <button class="record-delete" data-id="${r.id}" onclick="deleteRecord('${r.id}')">×</button>
+            <button class="record-delete" onclick="deleteRecord('${r.id}')">×</button>
           </div>
           ${reactionsHTML}
         </div>
@@ -1056,8 +578,8 @@
     }).join('');
   }
 
-  function renderYamadaMessages() {
-    const list = document.getElementById('yamada-messages');
+  function renderRakkyoMessages() {
+    const list = document.getElementById('rakkyo-messages');
     const fromSaki = messages.filter(m => m.from_who === 'saki');
     if (fromSaki.length === 0) {
       list.innerHTML = '<div class="empty">まだメッセージはありません</div>';
@@ -1072,68 +594,62 @@
     `).join('');
   }
 
-  function renderRewards(total) {
-    const list = document.getElementById('rewards-list');
-    list.innerHTML = REWARDS.map(r => {
-      const unlocked = total >= r.hours;
-      return `
-        <div class="reward-item">
-          <span class="reward-hours">${r.hours}h</span>
-          <span class="reward-text ${unlocked ? 'unlocked' : ''}">${escapeHtml(r.text)}</span>
-          <span class="reward-status ${unlocked ? 'unlocked' : ''}">${unlocked ? '達成' : 'ロック'}</span>
-        </div>
-      `;
-    }).join('');
-  }
-
   async function addRecord(hours) {
     if (!hours || hours <= 0) return;
-    const rec = {
-      date: new Date().toISOString().slice(0, 10),
-      hours: Math.round(hours * 100) / 100
-    };
+    const rec = { date: new Date().toISOString().slice(0, 10), hours: Math.round(hours * 100) / 100 };
     const { error } = await sb.from('records').insert([rec]);
-    if (error) {
-      showToast('保存に失敗しました');
-      console.error(error);
-      return;
-    }
-    await fetchAll();
-    updateYamadaUI();
+    if (error) { showToast('保存失敗'); console.error(error); return; }
+    await fetchAll(); updateRakkyoUI();
     showToast(`${rec.hours.toFixed(1)}時間を記録したよ`);
   }
 
   window.deleteRecord = async (id) => {
     if (!confirm('この記録を削除しますか？')) return;
     const { error } = await sb.from('records').delete().eq('id', id);
-    if (error) {
-      showToast('削除に失敗しました');
-      return;
-    }
-    await fetchAll();
-    updateYamadaUI();
+    if (error) { showToast('削除失敗'); return; }
+    await fetchAll(); updateRakkyoUI();
   };
 
   window.selfKatsu = () => {
     const msg = '📚 おいらっきょ、サボってる場合か？\n試験まであと' + daysLeft() + '日。\n累計 ' + totalHours().toFixed(1) + 'h / 600h\nさっさと始めろ。';
-    const url = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
-    window.open(url, '_blank');
+    window.open('https://line.me/R/share?text=' + encodeURIComponent(msg), '_blank');
   };
-
   window.sakiKatsu = () => {
     const msg = '🚩 さき、白旗です。\n24時間以上サボってます。\n累計 ' + totalHours().toFixed(1) + 'h / 600h\n試験まであと' + daysLeft() + '日\n詰めてください…';
-    const url = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
-    window.open(url, '_blank');
+    window.open('https://line.me/R/share?text=' + encodeURIComponent(msg), '_blank');
   };
 
-  // ========== さきちゃんモード ==========
+  // ============ さきちゃんモード ============
   async function initSaki() {
     await fetchAll();
     updateSakiUI();
-    setInterval(async () => {
-      await fetchAll();
-      updateSakiUI();
-    }, 15000);
+    loadCategoriesForSaki();
+    setInterval(async () => { await fetchAll(); updateSakiUI(); }, 15000);
+  }
+
+  function loadCategoriesForSaki() {
+    const customs = [...new Set(activities.filter(a => a.who === 'saki').map(a => a.category))];
+    const all = [...new Set([...DEFAULT_CATEGORIES, ...customs])];
+    const container = document.getElementById('category-tags');
+    if (!container) return;
+    container.innerHTML = all.map(c => `
+      <button class="category-tag ${c === selectedCategory ? 'active' : ''}" data-cat="${escapeHtml(c)}">${getCategoryEmoji(c)} ${escapeHtml(c)}</button>
+    `).join('') + `<input type="text" class="category-add-input" id="new-cat-input" placeholder="+ 新規">`;
+    container.querySelectorAll('.category-tag').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedCategory = btn.dataset.cat;
+        loadCategoriesForSaki();
+      });
+    });
+    const inp = document.getElementById('new-cat-input');
+    if (inp) {
+      inp.addEventListener('keypress', e => {
+        if (e.key === 'Enter' && inp.value.trim()) {
+          selectedCategory = inp.value.trim();
+          loadCategoriesForSaki();
+        }
+      });
+    }
   }
 
   function updateSakiUI() {
@@ -1150,7 +666,47 @@
 
     renderSakiSaboruAlert();
     renderSakiRecords();
+    renderSakiMyRecords();
+    renderPartnerSummarySaki();
   }
+
+  function renderPartnerSummarySaki() {
+    const el = document.getElementById('partner-stats-saki');
+    const today = todayHours();
+    const total = totalHours();
+    if (today === 0 && total === 0) {
+      el.innerHTML = '<span class="partner-stat">らっきょはまだ記録してないよ</span>';
+    } else {
+      el.innerHTML = `<span class="partner-stat">今日 <strong>${today.toFixed(1)}h</strong></span>` +
+                     `<span class="partner-stat">累計 <strong>${total.toFixed(1)}h</strong> / 600h</span>`;
+    }
+  }
+
+  function renderSakiMyRecords() {
+    const list = document.getElementById('saki-my-records');
+    const myAct = activities.filter(a => a.who === 'saki');
+    if (myAct.length === 0) {
+      list.innerHTML = '<div class="empty">まだ記録ありません</div>';
+      return;
+    }
+    list.innerHTML = myAct.slice(0, 20).map(a => `
+      <div class="record-item">
+        <div class="record-main">
+          <span class="record-date">${formatDate(a.date)}</span>
+          <span class="record-category">${getCategoryEmoji(a.category)} ${escapeHtml(a.category)}</span>
+          <span class="record-time">${parseFloat(a.hours).toFixed(1)} h</span>
+          <button class="record-delete" onclick="deleteActivity('${a.id}')">×</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.deleteActivity = async (id) => {
+    if (!confirm('この記録を削除しますか？')) return;
+    const { error } = await sb.from('activities').delete().eq('id', id);
+    if (error) { showToast('削除失敗'); return; }
+    await fetchAll(); updateSakiUI();
+  };
 
   function renderSakiSaboruAlert() {
     const hours = hoursSinceLastRecord();
@@ -1170,12 +726,32 @@
       alert.classList.add('hidden');
     }
   }
-
   window.sakiPressure = () => {
     const msg = '👀 らっきょ、見えてるよ。\n最後の記録から24時間以上空いてるけど、何やってるの？\n試験まであと' + daysLeft() + '日だよ。';
-    const url = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
-    window.open(url, '_blank');
+    window.open('https://line.me/R/share?text=' + encodeURIComponent(msg), '_blank');
   };
+
+  function compressImage(file, maxSize = 600, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > h) { if (w > maxSize) { h = h * maxSize / w; w = maxSize; } }
+          else { if (h > maxSize) { w = w * maxSize / h; h = maxSize; } }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
   function renderSakiRecords() {
     const list = document.getElementById('saki-records-list');
@@ -1187,6 +763,9 @@
       const recReactions = reactions.filter(re => re.record_id === r.id);
       const usedEmojis = recReactions.map(re => re.emoji);
       const emojis = ['👏', '💪', '🔥', '😤', '🙄', '😴'];
+      const photoPreview = pendingPhotos[r.id]
+        ? `<img class="photo-preview" src="${pendingPhotos[r.id]}"><br><span class="photo-cancel" onclick="cancelPhoto('${r.id}')">写真を取り消す</span>`
+        : '';
       return `
         <div class="saki-record">
           <div class="saki-record-header">
@@ -1205,168 +784,218 @@
                 <span class="reaction-chip">
                   <span class="reaction-emoji">${re.emoji}</span>
                   ${re.message ? `<span class="reaction-msg">${escapeHtml(re.message)}</span>` : ''}
+                  ${re.photo_data ? `<img src="${re.photo_data}" alt="">` : ''}
                 </span>
               `).join('')}
             </div>
           ` : ''}
-          <input type="text" class="saki-message-input" id="msg-${r.id}" placeholder="一言コメント（任意）…">
-          <button class="saki-message-send" onclick="sendReactionMessage('${r.id}')">💬 コメント送信</button>
+          <input type="text" class="saki-message-input" id="msg-${r.id}" placeholder="一言コメント(任意)...">
+          ${photoPreview}
+          <div class="photo-buttons">
+            <label class="photo-btn">
+              📷 写真を添付
+              <input type="file" accept="image/*" capture="user" style="display:none;"
+                     onchange="handlePhoto(event, '${r.id}')">
+            </label>
+          </div>
+          <button class="saki-message-send" onclick="sendReactionMessage('${r.id}')">💬 送信</button>
         </div>
       `;
     }).join('');
   }
 
+  window.handlePhoto = async (e, recordId) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    showToast('画像を圧縮中...');
+    try {
+      const compressed = await compressImage(file);
+      pendingPhotos[recordId] = compressed;
+      renderSakiRecords();
+    } catch (err) {
+      showToast('画像処理失敗');
+      console.error(err);
+    }
+  };
+  window.cancelPhoto = (recordId) => {
+    delete pendingPhotos[recordId];
+    renderSakiRecords();
+  };
+
   window.addReaction = async (recordId, emoji, btn) => {
     btn.disabled = true;
-    const { error } = await sb.from('reactions').insert([{
-      record_id: recordId,
-      emoji: emoji,
-      message: null
-    }]);
+    const { error } = await sb.from('reactions').insert([{ record_id: recordId, emoji: emoji, message: null }]);
     btn.disabled = false;
-    if (error) {
-      showToast('リアクション送信失敗');
-      return;
-    }
+    if (error) { showToast('送信失敗'); return; }
     btn.classList.add('reacted');
-    await fetchAll();
-    updateSakiUI();
+    await fetchAll(); updateSakiUI();
     showToast(`${emoji} を送ったよ`);
   };
 
   window.sendReactionMessage = async (recordId) => {
     const input = document.getElementById('msg-' + recordId);
     const text = input.value.trim();
-    if (!text) {
-      showToast('コメントを入力してね');
-      return;
-    }
+    const photo = pendingPhotos[recordId];
+    if (!text && !photo) { showToast('コメントか写真を入れてね'); return; }
     const { error } = await sb.from('reactions').insert([{
       record_id: recordId,
-      emoji: '💬',
-      message: text
+      emoji: photo ? '📷' : '💬',
+      message: text || null,
+      photo_data: photo || null
     }]);
-    if (error) {
-      showToast('送信失敗');
-      return;
-    }
+    if (error) { showToast('送信失敗'); console.error(error); return; }
     input.value = '';
-    await fetchAll();
-    updateSakiUI();
+    delete pendingPhotos[recordId];
+    await fetchAll(); updateSakiUI();
     showToast('送信したよ');
   };
 
-  // さきちゃんメッセージ送信
-  document.getElementById('saki-msg-send').addEventListener('click', async () => {
-    const ta = document.getElementById('saki-msg-text');
-    const text = ta.value.trim();
-    if (!text) {
-      showToast('メッセージを入力してね');
-      return;
+  // ============ イベント設定 ============
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => setRole(btn.dataset.role));
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // タイマー
+    const tBtn = document.getElementById('timer-toggle');
+    let timerStart = null, timerElapsed = 0, timerInterval = null;
+    function formatTimer(ms) {
+      const total = Math.floor(ms / 1000);
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+      return [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
     }
-    const { error } = await sb.from('messages').insert([{
-      from_who: 'saki',
-      text: text
-    }]);
-    if (error) {
-      showToast('送信失敗');
-      return;
+    function tickTimer() {
+      const elapsed = timerElapsed + (timerStart ? (Date.now() - timerStart) : 0);
+      document.getElementById('timer').textContent = formatTimer(elapsed);
     }
-    ta.value = '';
-    showToast('らっきょに送ったよ');
-    await fetchAll();
-  });
-
-  // ========== タイマー ==========
-  let timerStart = null;
-  let timerElapsed = 0;
-  let timerInterval = null;
-
-  function formatTimer(ms) {
-    const total = Math.floor(ms / 1000);
-    const h = Math.floor(total / 3600);
-    const m = Math.floor((total % 3600) / 60);
-    const s = total % 60;
-    return [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
-  }
-  function tickTimer() {
-    const now = Date.now();
-    const elapsed = timerElapsed + (timerStart ? (now - timerStart) : 0);
-    document.getElementById('timer').textContent = formatTimer(elapsed);
-  }
-  document.getElementById('timer-toggle').addEventListener('click', () => {
-    const btn = document.getElementById('timer-toggle');
-    const display = document.getElementById('timer');
-    const saveBtn = document.getElementById('timer-save');
-    if (timerStart) {
-      timerElapsed += Date.now() - timerStart;
-      timerStart = null;
-      clearInterval(timerInterval);
-      btn.textContent = '再開';
-      display.classList.remove('running');
-      saveBtn.classList.remove('hidden');
-    } else {
-      timerStart = Date.now();
-      timerInterval = setInterval(tickTimer, 1000);
-      btn.textContent = '一時停止';
-      display.classList.add('running');
-      saveBtn.classList.add('hidden');
+    if (tBtn) {
+      tBtn.addEventListener('click', () => {
+        const display = document.getElementById('timer');
+        const saveBtn = document.getElementById('timer-save');
+        if (timerStart) {
+          timerElapsed += Date.now() - timerStart;
+          timerStart = null;
+          clearInterval(timerInterval);
+          tBtn.textContent = '再開';
+          display.classList.remove('running');
+          saveBtn.classList.remove('hidden');
+        } else {
+          timerStart = Date.now();
+          timerInterval = setInterval(tickTimer, 1000);
+          tBtn.textContent = '一時停止';
+          display.classList.add('running');
+          saveBtn.classList.add('hidden');
+        }
+      });
     }
-  });
-  document.getElementById('timer-save').addEventListener('click', async () => {
-    const totalMs = timerElapsed + (timerStart ? (Date.now() - timerStart) : 0);
-    const hours = totalMs / 1000 / 3600;
-    if (hours < 0.01) { showToast('短すぎるよ'); return; }
-    await addRecord(hours);
-    timerStart = null;
-    timerElapsed = 0;
-    clearInterval(timerInterval);
-    document.getElementById('timer').textContent = '00:00:00';
-    document.getElementById('timer-toggle').textContent = 'スタート';
-    document.getElementById('timer-save').classList.add('hidden');
-  });
-  document.getElementById('timer-reset').addEventListener('click', () => {
-    if (timerStart && !confirm('タイマーをリセットしますか？')) return;
-    timerStart = null;
-    timerElapsed = 0;
-    clearInterval(timerInterval);
-    document.getElementById('timer').textContent = '00:00:00';
-    document.getElementById('timer-toggle').textContent = 'スタート';
-    document.getElementById('timer').classList.remove('running');
-    document.getElementById('timer-save').classList.add('hidden');
-  });
+    const sBtn = document.getElementById('timer-save');
+    if (sBtn) {
+      sBtn.addEventListener('click', async () => {
+        const totalMs = timerElapsed + (timerStart ? (Date.now() - timerStart) : 0);
+        const hours = totalMs / 1000 / 3600;
+        if (hours < 0.01) { showToast('短すぎるよ'); return; }
+        await addRecord(hours);
+        timerStart = null; timerElapsed = 0;
+        clearInterval(timerInterval);
+        document.getElementById('timer').textContent = '00:00:00';
+        document.getElementById('timer-toggle').textContent = 'スタート';
+        document.getElementById('timer-save').classList.add('hidden');
+      });
+    }
+    const rBtn = document.getElementById('timer-reset');
+    if (rBtn) {
+      rBtn.addEventListener('click', () => {
+        if (timerStart && !confirm('タイマーをリセットしますか？')) return;
+        timerStart = null; timerElapsed = 0;
+        clearInterval(timerInterval);
+        document.getElementById('timer').textContent = '00:00:00';
+        document.getElementById('timer-toggle').textContent = 'スタート';
+        document.getElementById('timer').classList.remove('running');
+        document.getElementById('timer-save').classList.add('hidden');
+      });
+    }
 
-  // 手動入力
-  document.getElementById('manual-add').addEventListener('click', async () => {
-    const input = document.getElementById('manual-hours');
-    const hours = parseFloat(input.value);
-    if (!hours || hours <= 0) { showToast('時間を入力してね'); return; }
-    await addRecord(hours);
-    input.value = '';
-  });
+    // 手動入力
+    const mAdd = document.getElementById('manual-add');
+    if (mAdd) {
+      mAdd.addEventListener('click', async () => {
+        const input = document.getElementById('manual-hours');
+        const hours = parseFloat(input.value);
+        if (!hours || hours <= 0) { showToast('時間を入力してね'); return; }
+        await addRecord(hours);
+        input.value = '';
+      });
+    }
 
-  // LINE送信
-  document.getElementById('line-send').addEventListener('click', () => {
-    const total = totalHours();
-    const today = todayHours();
-    const remain = Math.max(0, TARGET_HOURS - total);
-    const msg = `📚 宅建勉強進捗\n試験まであと${daysLeft()}日\n累計 ${total.toFixed(1)}h / 600h\n今日 ${today.toFixed(1)}h\n残り ${remain.toFixed(1)}h\n見ててね💪`;
-    const url = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
-    window.open(url, '_blank');
-  });
+    // LINE送信
+    const lSend = document.getElementById('line-send');
+    if (lSend) {
+      lSend.addEventListener('click', () => {
+        const total = totalHours(), today = todayHours(), remain = Math.max(0, TARGET_HOURS - total);
+        const msg = `📚 宅建勉強進捗\n試験まであと${daysLeft()}日\n累計 ${total.toFixed(1)}h / 600h\n今日 ${today.toFixed(1)}h\n残り ${remain.toFixed(1)}h\n見ててね💪`;
+        window.open('https://line.me/R/share?text=' + encodeURIComponent(msg), '_blank');
+      });
+    }
 
-  // タブ切替
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const target = tab.dataset.tab;
-      document.getElementById('yamada-tab-study').classList.toggle('hidden', target !== 'study');
-      document.getElementById('yamada-tab-saki').classList.toggle('hidden', target !== 'saki');
+    // さきちゃん活動追加
+    const sActAdd = document.getElementById('saki-activity-add');
+    if (sActAdd) {
+      sActAdd.addEventListener('click', async () => {
+        const input = document.getElementById('saki-hours');
+        const hours = parseFloat(input.value);
+        if (!hours || hours <= 0) { showToast('時間を入力してね'); return; }
+        const { error } = await sb.from('activities').insert([{
+          who: 'saki',
+          category: selectedCategory,
+          date: new Date().toISOString().slice(0, 10),
+          hours: Math.round(hours * 100) / 100
+        }]);
+        if (error) { showToast('保存失敗'); return; }
+        input.value = '';
+        await fetchAll(); updateSakiUI(); loadCategoriesForSaki();
+        showToast(`${selectedCategory} ${hours.toFixed(1)}h を記録したよ`);
+      });
+    }
+
+    // さきちゃんメッセージ送信
+    const sMsgSend = document.getElementById('saki-msg-send');
+    if (sMsgSend) {
+      sMsgSend.addEventListener('click', async () => {
+        const ta = document.getElementById('saki-msg-text');
+        const text = ta.value.trim();
+        if (!text) { showToast('メッセージを入力してね'); return; }
+        const { error } = await sb.from('messages').insert([{ from_who: 'saki', text: text }]);
+        if (error) { showToast('送信失敗'); return; }
+        ta.value = '';
+        showToast('らっきょに送ったよ');
+        await fetchAll();
+      });
+    }
+
+    // タブ切替
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const container = tab.closest('.tabs').parentElement;
+        container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        if (target.startsWith('saki-')) {
+          document.getElementById('saki-tab-self').classList.toggle('hidden', target !== 'saki-self');
+          document.getElementById('saki-tab-watch').classList.toggle('hidden', target !== 'saki-watch');
+        } else {
+          document.getElementById('rakkyo-tab-study').classList.toggle('hidden', target !== 'study');
+          document.getElementById('rakkyo-tab-saki').classList.toggle('hidden', target !== 'saki');
+        }
+      });
     });
+
+    // 起動
+    const savedRole = getRole();
+    if (savedRole) showRoleScreen(savedRole);
   });
 
-  // ========== ヘルパー ==========
   function formatDate(dateStr) {
     const today = new Date().toISOString().slice(0, 10);
     if (dateStr === today) return '今日';
@@ -1378,10 +1007,9 @@
     return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   }
   function escapeHtml(s) {
-    if (!s) return '';
-    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
-
   let toastTimer = null;
   function showToast(msg) {
     const t = document.getElementById('toast');
@@ -1390,14 +1018,6 @@
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
   }
-  window.switchRole = switchRole;
-
-  // ========== 起動 ==========
-  const savedRole = getRole();
-  if (savedRole) {
-    showRoleScreen(savedRole);
-  }
-
 </script>
 </body>
 </html>
