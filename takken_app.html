@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1d23">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="宅建600">
+<title>宅建600 - 勉強記録</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :root {
+    --bg: #f5f1ea;
+    --bg-card: #ffffff;
+    --ink: #1a1d23;
+    --ink-soft: #5c5f66;
+    --ink-faint: #a0a4ab;
+    --accent: #c8463a;
+    --accent-soft: #e8c5c0;
+    --sub: #4a6741;
+    --gold: #b8893c;
+    --line: #e5dfd4;
+    --shadow: 0 1px 3px rgba(26, 29, 35, 0.04), 0 2px 8px rgba(26, 29, 35, 0.04);
+  }
+
+  html, body {
+    overscroll-behavior: none;
+  }
+
+  body {
+    font-family: 'Noto Serif JP', serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding-bottom: 80px;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(200, 70, 58, 0.03) 0%, transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(74, 103, 65, 0.03) 0%, transparent 40%);
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 18px;
+  }
+
+  /* ヘッダー */
+  header {
+    text-align: center;
+    padding: 12px 0 24px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .title {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .brand {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .brand .num {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+  }
+
+  /* タブ */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    background: var(--bg-card);
+    padding: 4px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+  }
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .tab.active {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  /* カウントダウンセクション */
+  .countdown-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .countdown-card::before {
+    content: '宅地建物取引士';
+    position: absolute;
+    top: 14px;
+    right: -10px;
+    transform: rotate(90deg);
+    transform-origin: top right;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--ink-faint);
+  }
+  .exam-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .exam-date {
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .days-left {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .days-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .days-unit {
+    font-size: 16px;
+    color: var(--ink-soft);
+  }
+  .days-sub {
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* 進捗カード */
+  .progress-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 22px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+  }
+  .progress-title {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+  }
+  .progress-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sub), var(--accent));
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+  .progress-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    font-size: 11px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-label {
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+  }
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.sub { color: var(--sub); }
+
+  /* ペース表示 */
+  .pace-note {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  .pace-note strong {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* ストップウォッチ */
+  .timer-card {
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 16px;
+    padding: 28px 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .timer-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+  }
+  .timer-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 48px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin-bottom: 18px;
+    color: var(--bg);
+  }
+  .timer-display.running {
+    color: var(--accent-soft);
+  }
+  .timer-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  .btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 24px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    flex: 1;
+  }
+  .btn-primary:active {
+    transform: scale(0.97);
+  }
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--bg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .btn-secondary:active {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .btn-save {
+    background: var(--sub);
+    color: white;
+    flex: 1;
+  }
+
+  /* 手動入力 */
+  .input-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .input-title {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .input-group {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 0 12px;
+  }
+  .input-group input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    width: 100%;
+    color: var(--ink);
+    outline: none;
+    text-align: center;
+  }
+  .input-unit {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .input-add {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* 記録リスト */
+  .records-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .records-title {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .clear-btn {
+    background: transparent;
+    border: none;
+    color: var(--ink-faint);
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .record-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .record-item:last-child {
+    border-bottom: none;
+  }
+  .record-date {
+    color: var(--ink-soft);
+  }
+  .record-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+  .record-delete {
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0 6px;
+  }
+  .empty {
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 13px;
+    padding: 20px 0;
+  }
+
+  /* さきちゃんタブ */
+  .saki-header {
+    background: linear-gradient(135deg, #e8c5c0, #f5d4cf);
+    border-radius: 16px;
+    padding: 22px 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .saki-header::after {
+    content: '✦';
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 14px;
+    color: var(--accent);
+    opacity: 0.5;
+  }
+  .saki-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .saki-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .saki-sub {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  /* メッセージ */
+  .message-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .message-title {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .message-input {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--bg);
+    color: var(--ink);
+    resize: vertical;
+    outline: none;
+  }
+  .message-input:focus {
+    border-color: var(--accent);
+  }
+  .message-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .message-save {
+    flex: 1;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .message-list {
+    margin-top: 14px;
+  }
+  .message-item {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    position: relative;
+  }
+  .message-meta {
+    font-size: 10px;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .message-text {
+    color: var(--ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .message-delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* ご褒美 */
+  .rewards-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .rewards-title {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .rewards-sub {
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-bottom: 14px;
+  }
+  .reward-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .reward-item:last-child {
+    border-bottom: none;
+  }
+  .reward-hours {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 60px;
+  }
+  .reward-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .reward-text.unlocked {
+    color: var(--sub);
+  }
+  .reward-status {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: var(--line);
+    color: var(--ink-faint);
+    font-weight: 600;
+  }
+  .reward-status.unlocked {
+    background: var(--sub);
+    color: white;
+  }
+
+  .reward-add-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .reward-add-row input {
+    border: 1px solid var(--line);
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+  }
+  .reward-add-row .h-input {
+    width: 60px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .reward-add-row .text-input {
+    flex: 1;
+  }
+  .reward-add-row button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* LINE送信 */
+  .line-section {
+    background: #06c755;
+    color: white;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .line-title {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    margin-bottom: 4px;
+    opacity: 0.9;
+  }
+  .line-desc {
+    font-size: 11px;
+    opacity: 0.85;
+    margin-bottom: 12px;
+  }
+  .line-btn {
+    width: 100%;
+    background: white;
+    color: #06c755;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .hidden { display: none; }
+
+  /* 通知バナー */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 12px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+    z-index: 100;
+    max-width: 90%;
+    text-align: center;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="title">T A K K E N　2 0 2 6</div>
+    <div class="brand">宅建 <span class="num">600</span></div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="study">勉強記録</div>
+    <div class="tab" data-tab="saki">さきちゃん</div>
+  </div>
+
+  <!-- 勉強記録タブ -->
+  <div id="tab-study">
+
+    <div class="countdown-card">
+      <div class="exam-label">E X A M　D A T E</div>
+      <div class="exam-date">2026年10月14日(水) 試験日</div>
+      <div class="days-left">
+        <span class="days-num" id="days-num">—</span>
+        <span class="days-unit">日</span>
+      </div>
+      <div class="days-sub" id="days-sub">残り日数</div>
+    </div>
+
+    <div class="progress-card">
+      <div class="progress-header">
+        <div class="progress-title">P R O G R E S S</div>
+        <div class="progress-pct" id="progress-pct">0%</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+      </div>
+      <div class="progress-stats">
+        <div class="stat">
+          <div class="stat-label">合計</div>
+          <div class="stat-value sub" id="total-hours">0.0h</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">残り</div>
+          <div class="stat-value accent" id="remain-hours">600.0h</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">今日</div>
+          <div class="stat-value" id="today-hours">0.0h</div>
+        </div>
+      </div>
+      <div class="pace-note">
+        必要ペース: <strong id="pace-needed">—</strong> / 日
+      </div>
+    </div>
+
+    <div class="timer-card">
+      <div class="timer-label">S T U D Y　T I M E R</div>
+      <div class="timer-display" id="timer">00:00:00</div>
+      <div class="timer-buttons">
+        <button class="btn btn-primary" id="timer-toggle">スタート</button>
+        <button class="btn btn-save hidden" id="timer-save">記録</button>
+        <button class="btn btn-secondary" id="timer-reset">リセット</button>
+      </div>
+    </div>
+
+    <div class="input-card">
+      <div class="input-title">M A N U A L　I N P U T</div>
+      <div class="input-row">
+        <div class="input-group">
+          <input type="number" id="manual-hours" placeholder="0" min="0" step="0.1">
+          <span class="input-unit">時間</span>
+        </div>
+        <button class="input-add" id="manual-add">追加</button>
+      </div>
+    </div>
+
+    <div class="records-card">
+      <div class="records-title">
+        <span>R E C O R D S</span>
+        <button class="clear-btn" id="clear-all">すべて削除</button>
+      </div>
+      <div id="records-list">
+        <div class="empty">まだ記録がありません</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- さきちゃんタブ -->
+  <div id="tab-saki" class="hidden">
+
+    <div class="saki-header">
+      <div class="saki-label">S A K I 's　W A T C H</div>
+      <div class="saki-title">さきちゃん監視ルーム</div>
+      <div class="saki-sub">サボってないか見られてるよ</div>
+    </div>
+
+    <div class="line-section">
+      <div class="line-title">L I N E　通知</div>
+      <div class="line-desc">勉強開始時にさきちゃんに送信</div>
+      <button class="line-btn" id="line-send">LINEで「勉強始めるよ」を送る</button>
+    </div>
+
+    <div class="message-card">
+      <div class="message-title">さきちゃんへのメッセージ</div>
+      <textarea class="message-input" id="message-text" placeholder="今日の決意、宣言、報告など…"></textarea>
+      <div class="message-actions">
+        <button class="message-save" id="message-save">保存する</button>
+      </div>
+      <div class="message-list" id="message-list"></div>
+    </div>
+
+    <div class="rewards-card">
+      <div class="rewards-title">R E W A R D S</div>
+      <div class="rewards-sub">勉強時間でアンロックされるご褒美</div>
+      <div id="rewards-list"></div>
+      <div class="reward-add-row">
+        <input type="number" class="h-input" id="reward-hours-input" placeholder="h">
+        <input type="text" class="text-input" id="reward-text-input" placeholder="ご褒美を追加…">
+        <button id="reward-add">追加</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ========== ストレージ ==========
+  const STORE_KEY = 'takken600_data_v1';
+  const defaultData = {
+    records: [],
+    messages: [],
+    rewards: [
+      { hours: 50, text: 'デート行く' },
+      { hours: 100, text: 'ちょっといいご飯' },
+      { hours: 200, text: '欲しかった本を買う' },
+      { hours: 400, text: '小旅行' },
+      { hours: 600, text: '試験合格祝い 🎉' }
+    ]
+  };
+  let data = loadData();
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return JSON.parse(JSON.stringify(defaultData));
+      const parsed = JSON.parse(raw);
+      return { ...defaultData, ...parsed };
+    } catch {
+      return JSON.parse(JSON.stringify(defaultData));
+    }
+  }
+  function saveData() {
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }
+
+  // ========== 試験日 ==========
+  const EXAM_DATE = new Date(2026, 9, 14); // 10月=9
+  const TARGET_HOURS = 600;
+
+  function updateCountdown() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const diff = Math.ceil((EXAM_DATE - today) / (1000 * 60 * 60 * 24));
+    document.getElementById('days-num').textContent = diff;
+
+    const yyyy = EXAM_DATE.getFullYear();
+    const mm = EXAM_DATE.getMonth() + 1;
+    const dd = EXAM_DATE.getDate();
+    document.getElementById('days-sub').textContent =
+      diff > 0 ? `試験まであと${diff}日` : (diff === 0 ? '試験当日！' : `${-diff}日経過`);
+  }
+
+  // ========== 進捗 ==========
+  function totalHours() {
+    return data.records.reduce((s, r) => s + r.hours, 0);
+  }
+  function todayHours() {
+    const today = new Date().toISOString().slice(0, 10);
+    return data.records.filter(r => r.date === today).reduce((s, r) => s + r.hours, 0);
+  }
+
+  function updateProgress() {
+    const total = totalHours();
+    const remain = Math.max(0, TARGET_HOURS - total);
+    const today = todayHours();
+    const pct = Math.min(100, (total / TARGET_HOURS) * 100);
+
+    document.getElementById('total-hours').textContent = total.toFixed(1) + 'h';
+    document.getElementById('remain-hours').textContent = remain.toFixed(1) + 'h';
+    document.getElementById('today-hours').textContent = today.toFixed(1) + 'h';
+    document.getElementById('progress-pct').textContent = pct.toFixed(1) + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+
+    // 必要ペース
+    const now = new Date();
+    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const daysLeft = Math.max(1, Math.ceil((EXAM_DATE - todayDate) / (1000 * 60 * 60 * 24)));
+    const pace = remain / daysLeft;
+    document.getElementById('pace-needed').textContent = pace.toFixed(2) + 'h';
+  }
+
+  // ========== 記録リスト ==========
+  function renderRecords() {
+    const list = document.getElementById('records-list');
+    if (data.records.length === 0) {
+      list.innerHTML = '<div class="empty">まだ記録がありません</div>';
+      return;
+    }
+    const sorted = [...data.records].sort((a, b) => (b.date + b.id).localeCompare(a.date + a.id));
+    list.innerHTML = sorted.slice(0, 30).map(r => `
+      <div class="record-item">
+        <span class="record-date">${formatDate(r.date)}</span>
+        <span class="record-time">${r.hours.toFixed(1)} h</span>
+        <button class="record-delete" data-id="${r.id}">×</button>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.record-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        data.records = data.records.filter(r => r.id !== id);
+        saveData();
+        updateProgress();
+        renderRecords();
+        renderRewards();
+      });
+    });
+  }
+
+  function formatDate(dateStr) {
+    const [y, m, d] = dateStr.split('-');
+    const today = new Date().toISOString().slice(0, 10);
+    if (dateStr === today) return '今日';
+    return `${parseInt(m)}/${parseInt(d)}`;
+  }
+
+  function addRecord(hours) {
+    if (!hours || hours <= 0) return;
+    const rec = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      date: new Date().toISOString().slice(0, 10),
+      hours: Math.round(hours * 100) / 100
+    };
+    data.records.push(rec);
+    saveData();
+    updateProgress();
+    renderRecords();
+    renderRewards();
+  }
+
+  document.getElementById('manual-add').addEventListener('click', () => {
+    const input = document.getElementById('manual-hours');
+    const hours = parseFloat(input.value);
+    if (!hours || hours <= 0) {
+      showToast('時間を入力してね');
+      return;
+    }
+    addRecord(hours);
+    input.value = '';
+    showToast(`${hours.toFixed(1)}時間を記録したよ`);
+  });
+
+  document.getElementById('clear-all').addEventListener('click', () => {
+    if (confirm('すべての記録を削除します。よろしいですか？')) {
+      data.records = [];
+      saveData();
+      updateProgress();
+      renderRecords();
+      renderRewards();
+    }
+  });
+
+  // ========== ストップウォッチ ==========
+  let timerStart = null;
+  let timerElapsed = 0;
+  let timerInterval = null;
+
+  function formatTimer(ms) {
+    const total = Math.floor(ms / 1000);
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    return [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
+  }
+
+  function tickTimer() {
+    const now = Date.now();
+    const elapsed = timerElapsed + (timerStart ? (now - timerStart) : 0);
+    document.getElementById('timer').textContent = formatTimer(elapsed);
+  }
+
+  document.getElementById('timer-toggle').addEventListener('click', () => {
+    const btn = document.getElementById('timer-toggle');
+    const display = document.getElementById('timer');
+    const saveBtn = document.getElementById('timer-save');
+    if (timerStart) {
+      // 停止
+      timerElapsed += Date.now() - timerStart;
+      timerStart = null;
+      clearInterval(timerInterval);
+      btn.textContent = '再開';
+      display.classList.remove('running');
+      saveBtn.classList.remove('hidden');
+    } else {
+      // 開始
+      timerStart = Date.now();
+      timerInterval = setInterval(tickTimer, 1000);
+      btn.textContent = '一時停止';
+      display.classList.add('running');
+      saveBtn.classList.add('hidden');
+    }
+  });
+
+  document.getElementById('timer-save').addEventListener('click', () => {
+    const totalMs = timerElapsed + (timerStart ? (Date.now() - timerStart) : 0);
+    const hours = totalMs / 1000 / 3600;
+    if (hours < 0.01) {
+      showToast('短すぎるよ');
+      return;
+    }
+    addRecord(hours);
+    timerStart = null;
+    timerElapsed = 0;
+    clearInterval(timerInterval);
+    document.getElementById('timer').textContent = '00:00:00';
+    document.getElementById('timer-toggle').textContent = 'スタート';
+    document.getElementById('timer-save').classList.add('hidden');
+    showToast(`${hours.toFixed(2)}時間を記録したよ`);
+  });
+
+  document.getElementById('timer-reset').addEventListener('click', () => {
+    if (timerStart && !confirm('タイマーをリセットしますか？')) return;
+    timerStart = null;
+    timerElapsed = 0;
+    clearInterval(timerInterval);
+    document.getElementById('timer').textContent = '00:00:00';
+    document.getElementById('timer-toggle').textContent = 'スタート';
+    document.getElementById('timer').classList.remove('running');
+    document.getElementById('timer-save').classList.add('hidden');
+  });
+
+  // ========== メッセージ ==========
+  function renderMessages() {
+    const list = document.getElementById('message-list');
+    if (data.messages.length === 0) {
+      list.innerHTML = '';
+      return;
+    }
+    list.innerHTML = data.messages.slice().reverse().map(m => `
+      <div class="message-item">
+        <div class="message-meta">${m.date}</div>
+        <div class="message-text">${escapeHtml(m.text)}</div>
+        <button class="message-delete" data-id="${m.id}">×</button>
+      </div>
+    `).join('');
+    list.querySelectorAll('.message-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        data.messages = data.messages.filter(m => m.id !== btn.dataset.id);
+        saveData();
+        renderMessages();
+      });
+    });
+  }
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  document.getElementById('message-save').addEventListener('click', () => {
+    const text = document.getElementById('message-text').value.trim();
+    if (!text) {
+      showToast('メッセージを入力してね');
+      return;
+    }
+    const now = new Date();
+    data.messages.push({
+      id: Date.now().toString(36),
+      date: `${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`,
+      text: text
+    });
+    saveData();
+    document.getElementById('message-text').value = '';
+    renderMessages();
+    showToast('保存したよ');
+  });
+
+  // ========== LINE ==========
+  document.getElementById('line-send').addEventListener('click', () => {
+    const total = totalHours();
+    const today = todayHours();
+    const remain = Math.max(0, TARGET_HOURS - total);
+    const now = new Date();
+    const today_date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const daysLeft = Math.ceil((EXAM_DATE - today_date) / (1000*60*60*24));
+    const msg = `📚 宅建勉強スタート\n試験まであと${daysLeft}日\n累計 ${total.toFixed(1)}h / 600h\n今日 ${today.toFixed(1)}h\n見ててね💪`;
+    const url = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+  });
+
+  // ========== ご褒美 ==========
+  function renderRewards() {
+    const list = document.getElementById('rewards-list');
+    const total = totalHours();
+    const sorted = [...data.rewards].sort((a, b) => a.hours - b.hours);
+    list.innerHTML = sorted.map((r, idx) => {
+      const unlocked = total >= r.hours;
+      return `
+        <div class="reward-item">
+          <span class="reward-hours">${r.hours}h</span>
+          <span class="reward-text ${unlocked ? 'unlocked' : ''}">${escapeHtml(r.text)}</span>
+          <span class="reward-status ${unlocked ? 'unlocked' : ''}">${unlocked ? '達成' : 'ロック'}</span>
+          <button class="record-delete" data-idx="${idx}" style="margin-left:4px;">×</button>
+        </div>
+      `;
+    }).join('');
+
+    list.querySelectorAll('.record-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.idx);
+        sorted.splice(idx, 1);
+        data.rewards = sorted;
+        saveData();
+        renderRewards();
+      });
+    });
+  }
+
+  document.getElementById('reward-add').addEventListener('click', () => {
+    const hInput = document.getElementById('reward-hours-input');
+    const tInput = document.getElementById('reward-text-input');
+    const h = parseFloat(hInput.value);
+    const t = tInput.value.trim();
+    if (!h || h <= 0 || !t) {
+      showToast('時間と内容を入力してね');
+      return;
+    }
+    data.rewards.push({ hours: h, text: t });
+    saveData();
+    hInput.value = '';
+    tInput.value = '';
+    renderRewards();
+    showToast('ご褒美を追加したよ');
+  });
+
+  // ========== タブ切替 ==========
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.dataset.tab;
+      document.getElementById('tab-study').classList.toggle('hidden', target !== 'study');
+      document.getElementById('tab-saki').classList.toggle('hidden', target !== 'saki');
+    });
+  });
+
+  // ========== トースト ==========
+  let toastTimer = null;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  // ========== 初期化 ==========
+  updateCountdown();
+  updateProgress();
+  renderRecords();
+  renderMessages();
+  renderRewards();
+
+  // 日付が変わった時用に60秒ごとに更新
+  setInterval(() => {
+    updateCountdown();
+    updateProgress();
+  }, 60000);
+
+</script>
+</body>
+</html>
