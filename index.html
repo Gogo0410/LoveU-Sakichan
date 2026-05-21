@@ -338,6 +338,17 @@
       </div>
     </div>
 
+    <div class="timer-card">
+      <div class="timer-label">M Y　T I M E R</div>
+      <div style="font-size: 11px; color: var(--ink-faint); margin-bottom: 8px;" id="saki-timer-cat-label">読書を計測中</div>
+      <div class="timer-display" id="saki-timer">00:00:00</div>
+      <div class="timer-buttons">
+        <button class="btn btn-primary" id="saki-timer-toggle">スタート</button>
+        <button class="btn btn-save hidden" id="saki-timer-save">記録</button>
+        <button class="btn btn-secondary" id="saki-timer-reset">リセット</button>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-title">M Y　R E C O R D S</div>
       <div id="saki-my-records"><div class="loading">読み込み中</div></div>
@@ -454,6 +465,14 @@
     return (Date.now() - latest) / (1000 * 60 * 60);
   }
   function getCategoryEmoji(cat) { return CATEGORY_EMOJIS[cat] || '⭐'; }
+
+  function formatTimer(ms) {
+    const total = Math.floor(ms / 1000);
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    return [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
+  }
 
   // ============ らっきょモード ============
   async function initRakkyo() {
@@ -632,24 +651,45 @@
     const all = [...new Set([...DEFAULT_CATEGORIES, ...customs])];
     const container = document.getElementById('category-tags');
     if (!container) return;
+    // 入力中の値があれば保持
+    const oldInput = document.getElementById('new-cat-input');
+    const oldValue = oldInput ? oldInput.value : '';
     container.innerHTML = all.map(c => `
       <button class="category-tag ${c === selectedCategory ? 'active' : ''}" data-cat="${escapeHtml(c)}">${getCategoryEmoji(c)} ${escapeHtml(c)}</button>
-    `).join('') + `<input type="text" class="category-add-input" id="new-cat-input" placeholder="+ 新規">`;
-    container.querySelectorAll('.category-tag').forEach(btn => {
+    `).join('') + `
+      <input type="text" class="category-add-input" id="new-cat-input" placeholder="+ 新規" value="${escapeHtml(oldValue)}">
+      <button class="category-tag" id="new-cat-add" style="background: var(--sub); color: white; border-color: var(--sub);">追加</button>
+    `;
+    container.querySelectorAll('.category-tag[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {
         selectedCategory = btn.dataset.cat;
+        updateSakiTimerLabel();
         loadCategoriesForSaki();
       });
     });
     const inp = document.getElementById('new-cat-input');
+    const addBtn = document.getElementById('new-cat-add');
+    const doAdd = () => {
+      const val = inp.value.trim();
+      if (!val) { showToast('カテゴリ名を入力してね'); return; }
+      selectedCategory = val;
+      updateSakiTimerLabel();
+      loadCategoriesForSaki();
+      showToast(`「${val}」を選択中`);
+    };
     if (inp) {
       inp.addEventListener('keypress', e => {
-        if (e.key === 'Enter' && inp.value.trim()) {
-          selectedCategory = inp.value.trim();
-          loadCategoriesForSaki();
-        }
+        if (e.key === 'Enter') { e.preventDefault(); doAdd(); }
       });
     }
+    if (addBtn) {
+      addBtn.addEventListener('click', doAdd);
+    }
+  }
+
+  function updateSakiTimerLabel() {
+    const label = document.getElementById('saki-timer-cat-label');
+    if (label) label.textContent = `${selectedCategory}を計測中`;
   }
 
   function updateSakiUI() {
@@ -707,6 +747,18 @@
     if (error) { showToast('削除失敗'); return; }
     await fetchAll(); updateSakiUI();
   };
+
+  async function addSakiActivity(hours) {
+    const { error } = await sb.from('activities').insert([{
+      who: 'saki',
+      category: selectedCategory,
+      date: new Date().toISOString().slice(0, 10),
+      hours: Math.round(hours * 100) / 100
+    }]);
+    if (error) { showToast('保存失敗'); return; }
+    await fetchAll(); updateSakiUI(); loadCategoriesForSaki();
+    showToast(`${selectedCategory} ${hours.toFixed(2)}h を記録したよ`);
+  }
 
   function renderSakiSaboruAlert() {
     const hours = hoursSinceLastRecord();
@@ -859,13 +911,6 @@
     // タイマー
     const tBtn = document.getElementById('timer-toggle');
     let timerStart = null, timerElapsed = 0, timerInterval = null;
-    function formatTimer(ms) {
-      const total = Math.floor(ms / 1000);
-      const h = Math.floor(total / 3600);
-      const m = Math.floor((total % 3600) / 60);
-      const s = total % 60;
-      return [h, m, s].map(n => String(n).padStart(2, '0')).join(':');
-    }
     function tickTimer() {
       const elapsed = timerElapsed + (timerStart ? (Date.now() - timerStart) : 0);
       document.getElementById('timer').textContent = formatTimer(elapsed);
@@ -946,16 +991,62 @@
         const input = document.getElementById('saki-hours');
         const hours = parseFloat(input.value);
         if (!hours || hours <= 0) { showToast('時間を入力してね'); return; }
-        const { error } = await sb.from('activities').insert([{
-          who: 'saki',
-          category: selectedCategory,
-          date: new Date().toISOString().slice(0, 10),
-          hours: Math.round(hours * 100) / 100
-        }]);
-        if (error) { showToast('保存失敗'); return; }
+        await addSakiActivity(hours);
         input.value = '';
-        await fetchAll(); updateSakiUI(); loadCategoriesForSaki();
-        showToast(`${selectedCategory} ${hours.toFixed(1)}h を記録したよ`);
+      });
+    }
+
+    // さきちゃんタイマー
+    let sTimerStart = null, sTimerElapsed = 0, sTimerInterval = null;
+    function tickSakiTimer() {
+      const elapsed = sTimerElapsed + (sTimerStart ? (Date.now() - sTimerStart) : 0);
+      document.getElementById('saki-timer').textContent = formatTimer(elapsed);
+    }
+    const sTBtn = document.getElementById('saki-timer-toggle');
+    if (sTBtn) {
+      sTBtn.addEventListener('click', () => {
+        const display = document.getElementById('saki-timer');
+        const saveBtn = document.getElementById('saki-timer-save');
+        if (sTimerStart) {
+          sTimerElapsed += Date.now() - sTimerStart;
+          sTimerStart = null;
+          clearInterval(sTimerInterval);
+          sTBtn.textContent = '再開';
+          display.classList.remove('running');
+          saveBtn.classList.remove('hidden');
+        } else {
+          sTimerStart = Date.now();
+          sTimerInterval = setInterval(tickSakiTimer, 1000);
+          sTBtn.textContent = '一時停止';
+          display.classList.add('running');
+          saveBtn.classList.add('hidden');
+        }
+      });
+    }
+    const sSBtn = document.getElementById('saki-timer-save');
+    if (sSBtn) {
+      sSBtn.addEventListener('click', async () => {
+        const totalMs = sTimerElapsed + (sTimerStart ? (Date.now() - sTimerStart) : 0);
+        const hours = totalMs / 1000 / 3600;
+        if (hours < 0.01) { showToast('短すぎるよ'); return; }
+        await addSakiActivity(hours);
+        sTimerStart = null; sTimerElapsed = 0;
+        clearInterval(sTimerInterval);
+        document.getElementById('saki-timer').textContent = '00:00:00';
+        document.getElementById('saki-timer-toggle').textContent = 'スタート';
+        document.getElementById('saki-timer-save').classList.add('hidden');
+      });
+    }
+    const sRBtn = document.getElementById('saki-timer-reset');
+    if (sRBtn) {
+      sRBtn.addEventListener('click', () => {
+        if (sTimerStart && !confirm('タイマーをリセットしますか？')) return;
+        sTimerStart = null; sTimerElapsed = 0;
+        clearInterval(sTimerInterval);
+        document.getElementById('saki-timer').textContent = '00:00:00';
+        document.getElementById('saki-timer-toggle').textContent = 'スタート';
+        document.getElementById('saki-timer').classList.remove('running');
+        document.getElementById('saki-timer-save').classList.add('hidden');
       });
     }
 
