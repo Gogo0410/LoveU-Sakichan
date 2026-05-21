@@ -697,8 +697,8 @@
     <div class="mode-brand">宅建 <span class="num">600</span></div>
     <div class="mode-sub">あなたはどちら？</div>
     <button class="mode-btn yamada" data-role="yamada">
-      <div class="mode-btn-label">S T U D E N T</div>
-      <div class="mode-btn-name">山田くん</div>
+      <div class="mode-btn-label">R A K K Y O</div>
+      <div class="mode-btn-name">らっきょ</div>
       <div class="mode-btn-desc">勉強記録するモード</div>
     </button>
     <button class="mode-btn saki" data-role="saki">
@@ -709,12 +709,12 @@
   </div>
 </div>
 
-<!-- 山田くんモード -->
+<!-- らっきょモード -->
 <div class="container hidden" id="yamada-screen">
 
   <header>
     <button class="switch-btn" onclick="switchRole()">切替</button>
-    <span class="role-badge">山田くん</span>
+    <span class="role-badge">らっきょ</span>
     <div class="title">T A K K E N　2 0 2 6</div>
     <div class="brand">宅建 <span class="num">600</span></div>
   </header>
@@ -835,7 +835,7 @@
     <button class="switch-btn" onclick="switchRole()">切替</button>
     <span class="role-badge saki">さきちゃん</span>
     <div class="title">W A T C H E R　M O D E</div>
-    <div class="brand">山田くん監視所</div>
+    <div class="brand">らっきょ監視所</div>
   </header>
 
   <!-- サボり警告 -->
@@ -843,7 +843,7 @@
 
   <div class="card">
     <div class="progress-header">
-      <div class="progress-title">山田くんの進捗</div>
+      <div class="progress-title">らっきょの進捗</div>
       <div class="progress-pct" id="saki-progress-pct">0%</div>
     </div>
     <div class="progress-bar">
@@ -866,7 +866,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">山田くんへメッセージを送る</div>
+    <div class="card-title">らっきょへメッセージを送る</div>
     <textarea class="message-input" id="saki-msg-text" placeholder="応援、喝、なんでも…"></textarea>
     <button class="message-save" id="saki-msg-send">送信する</button>
   </div>
@@ -971,7 +971,7 @@
     return (Date.now() - latest) / (1000 * 60 * 60);
   }
 
-  // ========== 山田モード ==========
+  // ========== らっきょモード ==========
   async function initYamada() {
     await fetchAll();
     updateYamadaUI();
@@ -1115,7 +1115,7 @@
   };
 
   window.selfKatsu = () => {
-    const msg = '📚 おい山田、サボってる場合か？\n試験まであと' + daysLeft() + '日。\n累計 ' + totalHours().toFixed(1) + 'h / 600h\nさっさと始めろ。';
+    const msg = '📚 おいらっきょ、サボってる場合か？\n試験まであと' + daysLeft() + '日。\n累計 ' + totalHours().toFixed(1) + 'h / 600h\nさっさと始めろ。';
     const url = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
     window.open(url, '_blank');
   };
@@ -1160,7 +1160,7 @@
       const text = isFinite(hours) ? `${days > 0 ? days + '日' : Math.floor(hours) + '時間'}サボってる` : 'まだ記録なし';
       alert.className = 'saboru-alert';
       alert.innerHTML = `
-        <div class="saboru-title">⚠️ 山田くんがサボってます</div>
+        <div class="saboru-title">⚠️ らっきょがサボってます</div>
         <div class="saboru-desc">${text}。詰めるチャンスです。</div>
         <div class="saboru-actions">
           <button class="saboru-btn line" onclick="sakiPressure()">LINEで詰める</button>
@@ -1172,7 +1172,7 @@
   }
 
   window.sakiPressure = () => {
-    const msg = '👀 山田くん、見えてるよ。\n最後の記録から24時間以上空いてるけど、何やってるの？\n試験まであと' + daysLeft() + '日だよ。';
+    const msg = '👀 らっきょ、見えてるよ。\n最後の記録から24時間以上空いてるけど、何やってるの？\n試験まであと' + daysLeft() + '日だよ。';
     const url = 'https://line.me/R/share?text=' + encodeURIComponent(msg);
     window.open(url, '_blank');
   };
@@ -1273,7 +1273,7 @@
       return;
     }
     ta.value = '';
-    showToast('山田くんに送ったよ');
+    showToast('らっきょに送ったよ');
     await fetchAll();
   });
 
