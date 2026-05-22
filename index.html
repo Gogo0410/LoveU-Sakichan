@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1a1d23">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="宅建600">
 <title>宅建600 - らっきょ&さき</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,135 +15,82 @@
   :root {
     --bg: #f5f1ea; --bg-card: #ffffff; --ink: #1a1d23; --ink-soft: #5c5f66;
     --ink-faint: #a0a4ab; --accent: #c8463a; --accent-soft: #e8c5c0;
-    --sub: #4a6741; --gold: #b8893c; --line: #e5dfd4;
+    --sub: #4a6741; --line: #e5dfd4;
     --warn-bg: #fef3c7; --warn-text: #92400e;
     --shadow: 0 1px 3px rgba(26, 29, 35, 0.04), 0 2px 8px rgba(26, 29, 35, 0.04);
   }
-  html, body { overscroll-behavior: none; }
   body {
     font-family: 'Noto Serif JP', serif; background: var(--bg); color: var(--ink);
     line-height: 1.5; min-height: 100vh; padding-bottom: 80px;
-    background-image:
-      radial-gradient(circle at 20% 10%, rgba(200, 70, 58, 0.03) 0%, transparent 40%),
-      radial-gradient(circle at 80% 60%, rgba(74, 103, 65, 0.03) 0%, transparent 40%);
+    background-image: radial-gradient(circle at 20% 10%, rgba(200, 70, 58, 0.03) 0%, transparent 40%);
   }
   .container { max-width: 480px; margin: 0 auto; padding: 20px 18px; }
 
   /* Mode Select */
   .mode-select { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-  .mode-title { font-size: 11px; letter-spacing: 0.3em; color: var(--ink-soft); margin-bottom: 6px; }
-  .mode-brand { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+  .mode-brand { font-size: 28px; font-weight: 700; margin-bottom: 30px; }
   .mode-brand .num { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
-  .mode-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 36px; }
-  .mode-btn { width: 280px; padding: 18px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); }
-  .mode-btn:active { transform: scale(0.98); }
-  .mode-btn-label { font-size: 10px; letter-spacing: 0.3em; color: var(--ink-faint); margin-bottom: 4px; }
-  .mode-btn-name { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
-  .mode-btn-desc { font-size: 12px; color: var(--ink-soft); }
-  .mode-btn.rakkyo { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .mode-btn.rakkyo .mode-btn-name { color: var(--bg); }
-  .mode-btn.rakkyo .mode-btn-desc { color: var(--ink-faint); }
+  .mode-btn { width: 280px; padding: 20px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); }
+  .mode-btn.rakkyo { background: var(--ink); color: var(--bg); }
   .mode-btn.saki { background: linear-gradient(135deg, #e8c5c0, #f5d4cf); border-color: transparent; }
 
   header { text-align: center; padding: 12px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 20px; position: relative; }
-  .role-badge { position: absolute; top: 0; right: 0; font-size: 10px; padding: 4px 10px; border-radius: 12px; background: var(--ink); color: var(--bg); letter-spacing: 0.1em; }
+  .role-badge { position: absolute; top: 0; right: 0; font-size: 10px; padding: 4px 10px; border-radius: 12px; background: var(--ink); color: var(--bg); }
   .role-badge.saki { background: var(--accent); }
   .switch-btn { position: absolute; top: 0; left: 0; font-size: 11px; background: transparent; border: 1px solid var(--line); padding: 4px 10px; border-radius: 12px; color: var(--ink-soft); cursor: pointer; }
-  .title { font-size: 11px; letter-spacing: 0.3em; color: var(--ink-soft); margin-bottom: 4px; margin-top: 18px; }
-  .brand { font-size: 24px; font-weight: 700; letter-spacing: 0.05em; }
+  .brand { font-size: 24px; font-weight: 700; }
   .brand .num { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
 
   .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: var(--bg-card); padding: 4px; border-radius: 12px; box-shadow: var(--shadow); }
-  .tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; color: var(--ink-soft); border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 600; }
+  .tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; color: var(--ink-soft); border-radius: 8px; cursor: pointer; font-weight: 600; }
   .tab.active { background: var(--ink); color: var(--bg); }
 
   .card { background: var(--bg-card); border-radius: 16px; padding: 22px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
   .card-title { font-size: 12px; letter-spacing: 0.2em; color: var(--ink-soft); margin-bottom: 12px; }
 
-  .saboru-alert { background: var(--warn-bg); color: var(--warn-text); border-radius: 16px; padding: 16px 20px; margin-bottom: 16px; box-shadow: var(--shadow); border-left: 4px solid var(--accent); }
-  .saboru-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-  .saboru-desc { font-size: 12px; margin-bottom: 10px; }
-  .saboru-actions { display: flex; gap: 8px; }
-  .saboru-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
-  .saboru-btn.line { background: #06c755; color: white; }
-  .saboru-btn.self { background: var(--ink); color: var(--bg); }
+  .countdown-card { text-align: center; }
+  .days-left { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
+  .days-num { font-family: 'JetBrains Mono', monospace; font-size: 56px; font-weight: 700; color: var(--accent); }
 
-  .countdown-card { position: relative; overflow: hidden; }
-  .exam-label { font-size: 11px; letter-spacing: 0.2em; color: var(--ink-soft); margin-bottom: 8px; }
-  .exam-date { font-size: 14px; color: var(--ink); margin-bottom: 16px; }
-  .days-left { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
-  .days-num { font-family: 'JetBrains Mono', monospace; font-size: 56px; font-weight: 700; color: var(--accent); line-height: 1; letter-spacing: -0.02em; }
-  .days-unit { font-size: 16px; color: var(--ink-soft); }
-
-  .progress-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
-  .progress-title { font-size: 12px; letter-spacing: 0.2em; color: var(--ink-soft); }
-  .progress-pct { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; }
   .progress-bar { width: 100%; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sub), var(--accent)); border-radius: 4px; transition: width 0.6s ease; }
-  .progress-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 11px; }
-  .stat { text-align: center; }
-  .stat-label { color: var(--ink-faint); margin-bottom: 4px; letter-spacing: 0.1em; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sub), var(--accent)); transition: width 0.6s ease; }
+  .progress-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 11px; text-align: center; }
   .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600; }
-  .stat-value.accent { color: var(--accent); }
-  .stat-value.sub { color: var(--sub); }
-  .pace-note { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 12px; color: var(--ink-soft); text-align: center; }
 
   .input-row { display: flex; gap: 8px; align-items: center; }
   .input-group { flex: 1; display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 0 12px; }
-  .input-group input { flex: 1; border: none; background: transparent; padding: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--ink); outline: none; text-align: center; }
-  .input-unit { font-size: 12px; color: var(--ink-soft); }
-  .input-add { background: var(--ink); color: var(--bg); border: none; padding: 12px 18px; border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .input-group input { flex: 1; border: none; background: transparent; padding: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 16px; outline: none; text-align: center; }
+  .input-add { background: var(--ink); color: var(--bg); border: none; padding: 12px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; }
 
   .category-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-  .category-tag { padding: 6px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; font-size: 12px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .category-tag { padding: 6px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; font-size: 12px; cursor: pointer; }
   .category-tag.active { background: var(--accent); color: white; border-color: var(--accent); }
-  .category-add-input { width: 90px; padding: 6px 10px; border: 1px dashed var(--line); border-radius: 16px; font-size: 12px; background: transparent; outline: none; font-family: inherit; }
 
-  .records-title { font-size: 12px; letter-spacing: 0.2em; color: var(--ink-soft); margin-bottom: 12px; }
-  .record-item { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
-  .record-item:last-child { border-bottom: none; }
-  .record-main { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .record-date { color: var(--ink-soft); min-width: 46px; }
-  .record-category { font-size: 11px; background: var(--bg); padding: 2px 8px; border-radius: 10px; color: var(--ink-soft); }
-  .record-time { font-family: 'JetBrains Mono', monospace; font-weight: 600; margin-left: auto; }
-  .record-delete { background: none; border: none; color: var(--ink-faint); font-size: 16px; cursor: pointer; padding: 0 6px; }
-  .record-reactions { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .reaction-chip { background: var(--bg); padding: 4px 8px; border-radius: 10px; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; max-width: 100%; flex-wrap: wrap; }
-  .reaction-chip img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
-  .reaction-emoji { font-size: 14px; }
-  .reaction-msg { font-size: 11px; color: var(--ink-soft); word-break: break-word; }
+  .record-item { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .record-main { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px; }
+  .record-time { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .record-delete { background: none; border: none; color: var(--ink-faint); font-size: 16px; cursor: pointer; }
 
-  .saki-header { background: linear-gradient(135deg, #e8c5c0, #f5d4cf); border-radius: 16px; padding: 22px 20px; margin-bottom: 16px; text-align: center; box-shadow: var(--shadow); position: relative; }
-  .saki-label { font-size: 11px; letter-spacing: 0.3em; color: var(--accent); margin-bottom: 6px; }
-  .saki-title { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .saki-sub { font-size: 12px; color: var(--ink-soft); }
+  .record-reactions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .reaction-chip { background: var(--bg); padding: 6px 10px; border-radius: 10px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
+  .reaction-chip img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; }
+  .reaction-emoji { font-size: 16px; }
 
-  .action-card { background: var(--bg-card); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
-  .action-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-  .reaction-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-  .react-btn { background: var(--bg); border: 1px solid var(--line); padding: 6px 12px; border-radius: 18px; font-size: 16px; cursor: pointer; transition: all 0.2s; }
-  .react-btn.reacted { background: var(--accent-soft); border-color: var(--accent); }
-  .msg-input-area { width: 100%; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
-  .msg-input { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-family: inherit; font-size: 12px; background: var(--bg); outline: none; }
-  .msg-send-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 8px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 12px; }
-  .photo-preview { margin-top: 8px; max-width: 120px; border-radius: 8px; }
+  .action-card { background: var(--bg-card); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid var(--line); }
+  .action-header { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 12px; }
+  .reaction-buttons { display: flex; gap: 8px; margin-bottom: 12px; }
+  .react-btn { background: var(--bg); border: 1px solid var(--line); padding: 8px 12px; border-radius: 12px; cursor: pointer; font-size: 16px; }
+  
+  .msg-input-area { background: var(--bg); padding: 12px; border-radius: 12px; margin-top: 10px; }
+  .msg-input { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-family: inherit; font-size: 13px; outline: none; margin-bottom: 8px; }
+  .msg-send-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+  .photo-preview { margin-top: 10px; width: 100%; max-width: 150px; border-radius: 8px; display: block; }
 
-  .message-item { background: var(--bg); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
-  .message-from { font-size: 10px; color: var(--accent); font-weight: 700; margin-bottom: 2px; }
-  .message-text { color: var(--ink); white-space: pre-wrap; word-break: break-word; }
-
-  .partner-card { background: linear-gradient(135deg, #fff5f3, #fef0ec); border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; box-shadow: var(--shadow); }
-  .partner-title { font-size: 11px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 6px; }
-  .partner-stats { display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
-  .partner-stat { font-size: 12px; color: var(--ink-soft); }
-  .partner-stat strong { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--ink); }
-
-  .line-section { background: #06c755; color: white; border-radius: 16px; padding: 18px 20px; margin-bottom: 16px; }
-  .line-btn { width: 100%; background: white; color: #06c755; border: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; margin-top: 10px; }
+  .partner-card { background: linear-gradient(135deg, #fff5f3, #fef0ec); border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; }
+  .partner-title { font-size: 11px; color: var(--accent); margin-bottom: 4px; font-weight: 700; }
 
   .hidden { display: none !important; }
-  .loading { text-align: center; padding: 40px 0; color: var(--ink-faint); font-size: 13px; }
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: var(--bg); padding: 12px 20px; border-radius: 24px; font-size: 13px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: transform 0.3s ease; z-index: 1000; }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: var(--bg); padding: 12px 24px; border-radius: 30px; font-size: 13px; font-weight: 600; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: 0.3s; z-index: 9999; }
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
@@ -153,16 +98,9 @@
 
 <div id="mode-screen" class="container">
   <div class="mode-select">
-    <div class="mode-title">T A K K E N　2 0 2 6</div>
     <div class="mode-brand">宅建 <span class="num">600</span></div>
-    <button class="mode-btn rakkyo" onclick="setRole('rakkyo')">
-      <div class="mode-btn-label">R A K K Y O</div>
-      <div class="mode-btn-name">らっきょ</div>
-    </button>
-    <button class="mode-btn saki" onclick="setRole('saki')">
-      <div class="mode-btn-label">S A K I</div>
-      <div class="mode-btn-name">さきちゃん</div>
-    </button>
+    <button class="mode-btn rakkyo" onclick="setRole('rakkyo')">らっきょ（勉強側）</button>
+    <button class="mode-btn saki" onclick="setRole('saki')">さきちゃん（応援側）</button>
   </div>
 </div>
 
@@ -172,64 +110,35 @@
     <span class="role-badge">らっきょ</span>
     <div class="brand">宅建 <span class="num">600</span></div>
   </header>
-
   <div class="tabs">
     <div class="tab active" onclick="showTab('rakkyo', 'study', this)">勉強記録</div>
     <div class="tab" onclick="showTab('rakkyo', 'saki', this)">さきちゃんルーム</div>
   </div>
-
   <div id="rakkyo-tab-study">
-    <div id="rakkyo-saboru" class="hidden"></div>
-    <div class="partner-card">
-      <div class="partner-title">S A K I 's　T O D A Y</div>
-      <div id="partner-stats-rakkyo" class="partner-stats"><span class="partner-stat">...</span></div>
-    </div>
+    <div class="partner-card"><div class="partner-title">SAKI'S TODAY</div><div id="partner-stats-rakkyo">—</div></div>
     <div class="card countdown-card">
-      <div class="exam-label">E X A M　D A T E</div>
-      <div class="exam-date">2026年10月14日(水) 試験日</div>
-      <div class="days-left">
-        <span class="days-num" id="days-num">—</span>
-        <span class="days-unit">日</span>
-      </div>
+      <div class="days-left"><span class="days-num" id="days-num">—</span><span style="font-size:16px;color:var(--ink-soft)">日</span></div>
+      <div style="font-size:12px;color:var(--ink-faint)">2026年10月14日 試験日まで</div>
     </div>
     <div class="card">
-      <div class="progress-header">
-        <div class="progress-title">P R O G R E S S</div>
-        <div class="progress-pct" id="progress-pct">0%</div>
-      </div>
-      <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width: 0%"></div></div>
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
       <div class="progress-stats">
-        <div class="stat"><div class="stat-label">合計</div><div id="total-hours" class="stat-value sub">0.0h</div></div>
-        <div class="stat"><div class="stat-label">残り</div><div id="remain-hours" class="stat-value accent">600.0h</div></div>
-        <div class="stat"><div class="stat-label">今日</div><div id="today-hours" class="stat-value">0.0h</div></div>
+        <div class="stat"><div>合計</div><div id="total-hours" class="stat-value">—</div></div>
+        <div class="stat"><div>残り</div><div id="remain-hours" class="stat-value" style="color:var(--accent)">—</div></div>
+        <div class="stat"><div>今日</div><div id="today-hours" class="stat-value">—</div></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">勉強時間を記録</div>
+      <div class="card-title">勉強した時間を入力</div>
       <div class="input-row">
-        <div class="input-group">
-          <input type="number" id="manual-hours" placeholder="0" step="0.1">
-          <span class="input-unit">時間</span>
-        </div>
-        <button class="input-add" onclick="saveRecord()">追加</button>
+        <div class="input-group"><input type="number" id="manual-hours" placeholder="0" step="0.1"><span>時間</span></div>
+        <button class="input-add" onclick="saveRecord()">記録</button>
       </div>
     </div>
-    <div class="line-section">
-      <button class="line-btn" onclick="sendLine()">LINEで進捗を共有する</button>
-    </div>
-    <div class="card">
-      <div class="records-title">R E C O R D S</div>
-      <div id="records-list"></div>
-    </div>
+    <div id="records-list"></div>
   </div>
-
   <div id="rakkyo-tab-saki" class="hidden">
-    <div class="saki-header"><div class="saki-title">さきちゃんの最近</div></div>
     <div id="saki-activity-for-rakkyo"></div>
-    <div class="card">
-      <div class="card-title">さきちゃんからの手紙</div>
-      <div id="rakkyo-messages"></div>
-    </div>
   </div>
 </div>
 
@@ -239,44 +148,21 @@
     <span class="role-badge saki">さきちゃん</span>
     <div class="brand">さきちゃんの場所</div>
   </header>
-
   <div class="tabs">
-    <div class="tab active" onclick="showTab('saki', 'self', this)">自分の記録</div>
+    <div class="tab active" onclick="showTab('saki', 'self', this)">自分の活動</div>
     <div class="tab" onclick="showTab('saki', 'watch', this)">らっきょ監視</div>
   </div>
-
   <div id="saki-tab-self">
     <div class="card">
-      <div class="card-title">活動を記録</div>
-      <div id="category-tags" class="category-tags"></div>
+      <div class="category-tags" id="category-tags"></div>
       <div class="input-row">
-        <div class="input-group">
-          <input type="number" id="saki-hours" placeholder="0" step="0.1">
-          <span class="input-unit">時間</span>
-        </div>
+        <div class="input-group"><input type="number" id="saki-hours" placeholder="0" step="0.1"><span>時間</span></div>
         <button class="input-add" onclick="saveSakiActivity()">追加</button>
       </div>
     </div>
-    <div class="card">
-      <div id="saki-my-records"></div>
-    </div>
+    <div id="saki-my-records"></div>
   </div>
-
   <div id="saki-tab-watch" class="hidden">
-    <div id="saki-saboru" class="hidden"></div>
-    <div class="card">
-      <div class="card-title">らっきょの進捗</div>
-      <div class="progress-bar"><div id="saki-progress-fill" class="progress-fill" style="width: 0%"></div></div>
-      <div class="progress-stats">
-        <div class="stat"><div class="stat-label">合計</div><div id="saki-total-hours" class="stat-value">0.0h</div></div>
-        <div class="stat"><div class="stat-label">今日</div><div id="saki-today-hours" class="stat-value">0.0h</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">らっきょへ手紙を書く</div>
-      <textarea id="saki-msg-text" class="msg-input" placeholder="応援メッセージなど" style="height:80px; margin-bottom:8px;"></textarea>
-      <button class="msg-send-btn" onclick="sendSakiMessage()">送信</button>
-    </div>
     <div id="rakkyo-records-for-saki"></div>
   </div>
 </div>
@@ -288,39 +174,31 @@
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcm9tbndlanphbmZib2VtaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMzc4MDcsImV4cCI6MjA5NDkxMzgwN30.GKaO7VUj4Rd5vxQ-FvSFjO8QmxuBUyKAdeohm3c1lps';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const EXAM_DATE = new Date(2026, 9, 14); // 2026-10-14
+  const EXAM_DATE = new Date(2026, 9, 14);
   const TARGET_HOURS = 600;
-  const DEFAULT_CATS = ['読書', '勉強', '運動', '仕事', '創作'];
   const CAT_EMOJIS = { '読書':'📖', '勉強':'📚', '運動':'🏃', '仕事':'💼', '創作':'🎨' };
 
-  let records = [], reactions = [], messages = [], activities = [];
-  let currentRole = null, selectedCat = '読書', pendingPhoto = {};
+  let records = [], reactions = [], activities = [], currentRole = null, selectedCat = '読書', pendingPhoto = {};
 
-  // --- Date Helpers (JST Aware) ---
-  function getTodayStr() {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-  }
+  const getTodayStr = () => {
+    const n = new Date();
+    return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
+  };
 
-  function getDaysLeft() {
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const diff = EXAM_DATE.getTime() - today.getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
-  }
+  const getDaysLeft = () => {
+    const t = new Date(); t.setHours(0,0,0,0);
+    return Math.ceil((EXAM_DATE - t) / (1000*60*60*24));
+  };
 
-  // --- Core Logic ---
   async function fetchAll() {
-    const [r1, r2, r3, r4] = await Promise.all([
+    const [r1, r2, r3] = await Promise.all([
       sb.from('records').select('*').order('created_at', { ascending: false }),
       sb.from('reactions').select('*').order('created_at', { ascending: false }),
-      sb.from('messages').select('*').order('created_at', { ascending: false }),
       sb.from('activities').select('*').order('created_at', { ascending: false })
     ]);
     records = r1.data || [];
     reactions = r2.data || [];
-    messages = r3.data || [];
-    activities = r4.data || [];
+    activities = r3.data || [];
     updateUI();
   }
 
@@ -329,76 +207,48 @@
     localStorage.setItem('takken_role', role);
     document.getElementById('mode-screen').classList.add('hidden');
     document.getElementById(role + '-screen').classList.remove('hidden');
-    fetchAll();
     if(role === 'saki') renderCategoryTags();
+    fetchAll();
   }
 
-  function switchRole() {
-    if(!confirm('モードを切り替えますか？')) return;
-    localStorage.removeItem('takken_role');
-    location.reload();
-  }
+  function switchRole() { if(confirm('切替えますか？')) { localStorage.removeItem('takken_role'); location.reload(); } }
 
-  function showTab(role, tabName, el) {
-    const container = document.getElementById(role + '-screen');
-    container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  function showTab(role, tab, el) {
+    const root = document.getElementById(role + '-screen');
+    root.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
-    container.querySelectorAll('[id*="-tab-"]').forEach(d => d.classList.add('hidden'));
-    document.getElementById(`${role}-tab-${tabName}`).classList.remove('hidden');
+    root.querySelectorAll('[id*="-tab-"]').forEach(d => d.classList.add('hidden'));
+    document.getElementById(`${role}-tab-${tab}`).classList.remove('hidden');
   }
 
   function updateUI() {
     const today = getTodayStr();
-    const days = getDaysLeft();
     const total = records.reduce((s, r) => s + parseFloat(r.hours), 0);
     const rakkyoToday = records.filter(r => r.date === today).reduce((s, r) => s + parseFloat(r.hours), 0);
-    const sakiToday = activities.filter(a => a.who === 'saki' && a.date === today).reduce((s, a) => s + parseFloat(a.hours), 0);
-    const pct = Math.min(100, (total / TARGET_HOURS) * 100);
-
-    // Common
-    if (document.getElementById('days-num')) document.getElementById('days-num').textContent = days;
-
+    const sakiToday = activities.filter(a => a.date === today).reduce((s, a) => s + parseFloat(a.hours), 0);
+    
     if (currentRole === 'rakkyo') {
-      document.getElementById('progress-pct').textContent = pct.toFixed(1) + '%';
-      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('days-num').textContent = getDaysLeft();
       document.getElementById('total-hours').textContent = total.toFixed(1) + 'h';
       document.getElementById('remain-hours').textContent = Math.max(0, TARGET_HOURS - total).toFixed(1) + 'h';
       document.getElementById('today-hours').textContent = rakkyoToday.toFixed(1) + 'h';
-      document.getElementById('partner-stats-rakkyo').innerHTML = `<span class="partner-stat">さきちゃんの今日: <strong>${sakiToday.toFixed(1)}h</strong></span>`;
+      document.getElementById('progress-fill').style.width = Math.min(100, (total/TARGET_HOURS)*100) + '%';
+      document.getElementById('partner-stats-rakkyo').textContent = `今日 ${sakiToday.toFixed(1)}h の活動をしています`;
       renderRakkyoStudyTab();
       renderSakiRoomForRakkyo();
-      checkSaboru('rakkyo-saboru', records);
     } else {
-      document.getElementById('saki-progress-fill').style.width = pct + '%';
-      document.getElementById('saki-total-hours').textContent = total.toFixed(1) + 'h';
-      document.getElementById('saki-today-hours').textContent = rakkyoToday.toFixed(1) + 'h';
       renderSakiSelfTab();
       renderSakiWatchTab();
-      checkSaboru('saki-saboru', records);
     }
   }
 
-  function checkSaboru(id, data) {
-    const el = document.getElementById(id);
-    if (!data.length) return;
-    const last = new Date(data[0].created_at).getTime();
-    const hours = (Date.now() - last) / (1000 * 60 * 60);
-    if (hours > 24) {
-      el.className = 'saboru-alert';
-      el.innerHTML = `<div class="saboru-title">⚠️ 24時間以上記録がありません</div><div class="saboru-desc">サボり気味です！</div>`;
-      el.classList.remove('hidden');
-    } else {
-      el.classList.add('hidden');
-    }
-  }
-
-  // --- Rakkyo Functions ---
+  // --- Rakkyo ---
   async function saveRecord() {
     const h = parseFloat(document.getElementById('manual-hours').value);
-    if (!h || h <= 0) return showToast('時間を入力して');
+    if (!h) return;
     await sb.from('records').insert([{ date: getTodayStr(), hours: h }]);
     document.getElementById('manual-hours').value = '';
-    showToast('記録しました');
+    showToast('記録しました！');
     fetchAll();
   }
 
@@ -407,7 +257,7 @@
     list.innerHTML = records.slice(0, 10).map(r => `
       <div class="record-item">
         <div class="record-main">
-          <span class="record-date">${r.date === getTodayStr() ? '今日' : r.date.slice(5)}</span>
+          <span>${r.date.slice(5)} 勉強記録</span>
           <span class="record-time">${parseFloat(r.hours).toFixed(1)}h</span>
           <button class="record-delete" onclick="deleteItem('records','${r.id}')">×</button>
         </div>
@@ -417,135 +267,87 @@
   }
 
   function renderSakiRoomForRakkyo() {
-    // さきちゃんの活動一覧 + リアクションボタン
     const area = document.getElementById('saki-activity-for-rakkyo');
-    const sakiActs = activities.filter(a => a.who === 'saki');
-    area.innerHTML = sakiActs.slice(0, 10).map(a => `
+    area.innerHTML = `<div class="card-title">さきちゃんの最近の活動</div>` + activities.slice(0, 10).map(a => `
       <div class="action-card">
-        <div class="action-header">
-          <span style="font-size:12px; color:var(--ink-soft)">${a.date.slice(5)}</span>
-          <span style="font-weight:700">${CAT_EMOJIS[a.category] || '✨'} ${a.category} / ${parseFloat(a.hours).toFixed(1)}h</span>
-        </div>
-        ${renderReactionButtons(a.id, 'activity')}
+        <div class="action-header"><span>${a.date.slice(5)}</span><strong>${CAT_EMOJIS[a.category]||''} ${a.category} / ${parseFloat(a.hours).toFixed(1)}h</strong></div>
+        <div class="reaction-buttons">${['👏','🔥','💪','👀'].map(e => `<button class="react-btn" onclick="addEmoji('${a.id}','${e}')">${e}</button>`).join('')}</div>
         ${renderReactionList(a.id)}
-        ${renderReactionInput(a.id)}
-      </div>
-    `).join('');
-
-    const msgArea = document.getElementById('rakkyo-messages');
-    msgArea.innerHTML = messages.filter(m => m.from_who === 'saki').map(m => `
-      <div class="message-item">
-        <div class="message-from">FROM SAKI</div>
-        <div class="message-text">${m.text}</div>
+        <div class="msg-input-area">
+          <input type="text" id="input-${a.id}" class="msg-input" placeholder="コメントを送る...">
+          <div style="display:flex; gap:8px;">
+            <label style="flex:1; background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px; font-size:12px; text-align:center; cursor:pointer;">
+              📷 写真<input type="file" accept="image/*" style="display:none" onchange="handlePhoto(event, '${a.id}')">
+            </label>
+            <button class="msg-send-btn" style="flex:2" onclick="sendComment('${a.id}')">送信</button>
+          </div>
+          <div id="preview-${a.id}"></div>
+        </div>
       </div>
     `).join('');
   }
 
-  // --- Saki Functions ---
+  // --- Saki ---
   function renderCategoryTags() {
     const area = document.getElementById('category-tags');
-    area.innerHTML = DEFAULT_CATS.map(c => `
-      <button class="category-tag ${c === selectedCat ? 'active' : ''}" onclick="selectCat('${c}')">${CAT_EMOJIS[c]} ${c}</button>
-    `).join('');
+    area.innerHTML = Object.keys(CAT_EMOJIS).map(c => `<button class="category-tag ${c===selectedCat?'active':''}" onclick="selectedCat='${c}';renderCategoryTags()">${CAT_EMOJIS[c]} ${c}</button>`).join('');
   }
-  function selectCat(c) { selectedCat = c; renderCategoryTags(); }
 
   async function saveSakiActivity() {
     const h = parseFloat(document.getElementById('saki-hours').value);
-    if (!h) return showToast('時間を入力して');
+    if (!h) return;
     await sb.from('activities').insert([{ who: 'saki', category: selectedCat, date: getTodayStr(), hours: h }]);
     document.getElementById('saki-hours').value = '';
-    showToast('記録しました');
+    showToast('記録しました！');
     fetchAll();
   }
 
   function renderSakiSelfTab() {
     const list = document.getElementById('saki-my-records');
-    list.innerHTML = activities.filter(a => a.who === 'saki').slice(0, 10).map(a => `
-      <div class="record-item">
-        <div class="record-main">
-          <span>${a.date.slice(5)}</span>
-          <span>${CAT_EMOJIS[a.category] || ''} ${a.category}</span>
-          <span class="record-time">${parseFloat(a.hours).toFixed(1)}h</span>
-          <button class="record-delete" onclick="deleteItem('activities','${a.id}')">×</button>
-        </div>
+    list.innerHTML = activities.slice(0, 10).map(a => `
+      <div class="action-card">
+        <div class="action-header"><span>${a.date.slice(5)}</span><strong>${CAT_EMOJIS[a.category]||''} ${a.category} / ${parseFloat(a.hours).toFixed(1)}h</strong></div>
+        ${renderReactionList(a.id)}
+        <div style="text-align:right"><button class="record-delete" onclick="deleteItem('activities','${a.id}')">記録を消す</button></div>
       </div>
     `).join('');
   }
 
   function renderSakiWatchTab() {
     const area = document.getElementById('rakkyo-records-for-saki');
-    area.innerHTML = records.slice(0, 10).map(r => `
+    area.innerHTML = `<div class="card-title">らっきょの勉強記録</div>` + records.slice(0, 10).map(r => `
       <div class="action-card">
-        <div class="action-header">
-          <span style="font-size:12px; color:var(--ink-soft)">${r.date.slice(5)}</span>
-          <span style="font-weight:700">勉強記録 / ${parseFloat(r.hours).toFixed(1)}h</span>
-        </div>
-        ${renderReactionButtons(r.id, 'record')}
+        <div class="action-header"><span>${r.date.slice(5)}</span><strong>勉強記録 / ${parseFloat(r.hours).toFixed(1)}h</strong></div>
+        <div class="reaction-buttons">${['👏','💪','📖','🔥'].map(e => `<button class="react-btn" onclick="addEmoji('${r.id}','${e}')">${e}</button>`).join('')}</div>
         ${renderReactionList(r.id)}
-        ${renderReactionInput(r.id)}
+        <div class="msg-input-area">
+          <input type="text" id="input-${r.id}" class="msg-input" placeholder="応援コメント...">
+          <div style="display:flex; gap:8px;">
+            <label style="flex:1; background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px; font-size:12px; text-align:center; cursor:pointer;">
+              📷 写真<input type="file" accept="image/*" style="display:none" onchange="handlePhoto(event, '${r.id}')">
+            </label>
+            <button class="msg-send-btn" style="flex:2" onclick="sendComment('${r.id}')">送信</button>
+          </div>
+          <div id="preview-${r.id}"></div>
+        </div>
       </div>
     `).join('');
   }
 
-  async function sendSakiMessage() {
-    const txt = document.getElementById('saki-msg-text').value;
-    if(!txt) return;
-    await sb.from('messages').insert([{ from_who: 'saki', text: txt }]);
-    document.getElementById('saki-msg-text').value = '';
-    showToast('送りました');
-    fetchAll();
-  }
-
-  // --- Interaction Components ---
-  function renderReactionButtons(targetId, type) {
-    const emojis = ['👏', '🔥', '💪', '😤', '😴'];
-    return `<div class="reaction-buttons">${emojis.map(e => `<button class="react-btn" onclick="addEmoji('${targetId}','${e}')">${e}</button>`).join('')}</div>`;
-  }
-
-  function renderReactionList(targetId) {
-    const filtered = reactions.filter(re => re.record_id === targetId);
-    if(!filtered.length) return '';
-    return `<div class="record-reactions">${filtered.map(re => `
-      <span class="reaction-chip">
-        <span class="reaction-emoji">${re.emoji || '💬'}</span>
-        ${re.message ? `<span class="reaction-msg">${re.message}</span>` : ''}
-        ${re.photo_data ? `<img src="${re.photo_data}">` : ''}
-      </span>
-    `).join('')}</div>`;
-  }
-
-  function renderReactionInput(targetId) {
-    return `
-      <div class="msg-input-area">
-        <input type="text" id="input-${targetId}" class="msg-input" placeholder="コメント...">
-        <div style="display:flex; gap:4px;">
-          <label style="flex:1; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px; font-size:11px; text-align:center; cursor:pointer;">
-            📷 写真
-            <input type="file" accept="image/*" style="display:none" onchange="handlePhoto(event, '${targetId}')">
-          </label>
-          <button class="msg-send-btn" style="flex:2" onclick="sendComment('${targetId}')">送信</button>
-        </div>
-        <div id="preview-area-${targetId}"></div>
-      </div>
-    `;
-  }
-
+  // --- Interaction ---
   async function handlePhoto(e, tid) {
-    const file = e.target.files[0];
-    if(!file) return;
+    const file = e.target.files[0]; if(!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
       pendingPhoto[tid] = ev.target.result;
-      document.getElementById(`preview-area-${tid}`).innerHTML = `<img src="${ev.target.result}" class="photo-preview">`;
+      document.getElementById(`preview-${tid}`).innerHTML = `<img src="${ev.target.result}" class="photo-preview">`;
     };
     reader.readAsDataURL(file);
   }
 
   async function addEmoji(tid, emoji) {
     await sb.from('reactions').insert([{ record_id: tid, emoji: emoji }]);
-    showToast(emoji);
-    fetchAll();
+    showToast(emoji); fetchAll();
   }
 
   async function sendComment(tid) {
@@ -553,35 +355,32 @@
     const photo = pendingPhoto[tid];
     if(!val && !photo) return;
     await sb.from('reactions').insert([{ record_id: tid, message: val, photo_data: photo }]);
+    document.getElementById(`input-${tid}`).value = '';
+    document.getElementById(`preview-${tid}`).innerHTML = '';
     delete pendingPhoto[tid];
-    showToast('送信しました');
-    fetchAll();
+    showToast('送信しました！'); fetchAll();
   }
 
-  async function deleteItem(table, id) {
-    if(!confirm('消しますか？')) return;
-    await sb.from(table).delete().eq('id', id);
-    fetchAll();
+  function renderReactionList(tid) {
+    const filtered = reactions.filter(re => re.record_id === tid);
+    if(!filtered.length) return '';
+    return `<div class="record-reactions">${filtered.map(re => `
+      <span class="reaction-chip">
+        ${re.emoji ? `<span class="reaction-emoji">${re.emoji}</span>` : '💬'}
+        ${re.message ? `<span>${re.message}</span>` : ''}
+        ${re.photo_data ? `<img src="${re.photo_data}" onclick="window.open(this.src)">` : ''}
+      </span>`).join('')}</div>`;
   }
 
-  function sendLine() {
-    const today = getTodayStr();
-    const rakkyoToday = records.filter(r => r.date === today).reduce((s, r) => s + parseFloat(r.hours), 0);
-    const total = records.reduce((s, r) => s + parseFloat(r.hours), 0);
-    const msg = `📚 宅建進捗報告\n試験まであと${getDaysLeft()}日\n今日：${rakkyoToday.toFixed(1)}h\n累計：${total.toFixed(1)}h / 600h`;
-    window.open(`https://line.me/R/share?text=${encodeURIComponent(msg)}`);
-  }
+  async function deleteItem(table, id) { if(confirm('削除しますか？')) { await sb.from(table).delete().eq('id', id); fetchAll(); } }
 
   function showToast(m) {
-    const t = document.getElementById('toast');
-    t.textContent = m; t.classList.add('show');
+    const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2000);
   }
 
-  // Init
   const savedRole = localStorage.getItem('takken_role');
   if (savedRole) setRole(savedRole);
 </script>
-
 </body>
 </html>
