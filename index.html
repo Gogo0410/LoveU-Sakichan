@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1a1d23">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>宅建600 - らっきょ&さき</title>
+<title>宅建600 - らっきょ&さき 決定版</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -25,12 +25,12 @@
   }
   .container { max-width: 480px; margin: 0 auto; padding: 20px 18px; }
 
-  /* Maxim Card */
-  .maxim-card { background: var(--ink); color: var(--bg); border-radius: 16px; padding: 18px; margin-bottom: 16px; text-align: center; }
+  /* 格言カード */
+  .maxim-card { background: var(--ink); color: var(--bg); border-radius: 16px; padding: 18px; margin-bottom: 16px; text-align: center; box-shadow: var(--shadow); }
   .maxim-label { font-size: 10px; letter-spacing: 0.2em; opacity: 0.7; margin-bottom: 8px; display: block; }
   .maxim-text { font-size: 14px; font-weight: 600; line-height: 1.6; }
 
-  /* Mode Select */
+  /* モード選択 */
   .mode-select { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
   .mode-brand { font-size: 28px; font-weight: 700; margin-bottom: 30px; }
   .mode-btn { width: 280px; padding: 20px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); }
@@ -51,10 +51,10 @@
   .card { background: var(--bg-card); border-radius: 16px; padding: 22px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
   .card-title { font-size: 12px; letter-spacing: 0.2em; color: var(--ink-soft); margin-bottom: 12px; }
 
-  /* Pet Evolution Area */
+  /* たまご進化 */
   .pet-area { display: flex; align-items: center; gap: 15px; padding: 10px 0; margin-bottom: 15px; border-bottom: 1px dashed var(--line); }
   .pet-emoji { font-size: 40px; }
-  .pet-info { font-size: 12px; color: var(--ink-soft); }
+  .pet-info { font-size: 11px; color: var(--ink-soft); line-height: 1.4; }
 
   .days-left { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
   .days-num { font-family: 'JetBrains Mono', monospace; font-size: 56px; font-weight: 700; color: var(--accent); }
@@ -64,33 +64,35 @@
   .progress-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 11px; text-align: center; }
   .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600; }
 
-  /* Inputs */
+  /* 入力UI */
   .input-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
   .input-group { flex: 1; display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 0 12px; }
   .input-group input { flex: 1; border: none; background: transparent; padding: 12px 0; font-family: inherit; font-size: 14px; outline: none; }
   .btn-submit { background: var(--ink); color: var(--bg); border: none; padding: 12px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; }
 
-  /* LINE Buttons */
+  /* LINE応援 */
   .line-group { display: flex; gap: 6px; margin-top: 15px; }
-  .line-btn { flex: 1; border: none; border-radius: 8px; padding: 10px 5px; color: white; font-size: 11px; font-weight: 700; cursor: pointer; opacity: 0.9; }
-  .line-btn:active { opacity: 1; transform: scale(0.98); }
+  .line-btn { flex: 1; border: none; border-radius: 8px; padding: 10px 5px; color: white; font-size: 11px; font-weight: 700; cursor: pointer; }
   .btn-warn { background: #c8463a; }
   .btn-praise { background: #4a6741; }
   .btn-cheer { background: #b8893c; }
 
+  /* フィード・記録カード */
   .record-item { padding: 16px 0; border-bottom: 1px solid var(--line); }
   .record-main { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px; }
   .record-time { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
   .record-delete { background: none; border: none; color: var(--ink-faint); font-size: 16px; cursor: pointer; }
 
-  .record-reactions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .reaction-chip { background: var(--bg); padding: 6px 10px; border-radius: 10px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; }
-  .reaction-chip img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; }
-
   .action-card { background: var(--bg-card); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid var(--line); }
-  .action-header { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 12px; }
-  .react-btn { background: var(--bg); border: 1px solid var(--line); padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 16px; }
+  .action-header { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 12px; font-weight: 700; }
   
+  .reaction-buttons { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .react-btn { background: var(--bg); border: 1px solid var(--line); padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 16px; }
+
+  .record-reactions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .reaction-chip { background: var(--bg); padding: 6px 10px; border-radius: 10px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); }
+  .reaction-chip img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; display: block; }
+
   .msg-input-area { background: var(--bg); padding: 12px; border-radius: 12px; margin-top: 10px; }
   .msg-input { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-family: inherit; font-size: 13px; outline: none; margin-bottom: 8px; }
   .msg-send-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; }
@@ -134,7 +136,7 @@
   <div id="rakkyo-tab-study">
     <div class="partner-card">
       <div class="partner-title">SAKI'S TODAY</div>
-      <div id="partner-stats-rakkyo" style="font-size:12px;">—</div>
+      <div id="partner-stats-rakkyo" style="font-size:12px;">読み込み中...</div>
     </div>
     
     <div class="card countdown-card">
@@ -142,7 +144,7 @@
         <span id="pet-rakkyo" class="pet-emoji">🥚</span>
         <div class="pet-info">
           <strong>たまごの成長</strong><br>
-          <span id="pet-guide">らっきょの勉強合計で進化するよ！</span>
+          <span id="pet-guide">らっきょの勉強合計で進化！(50h/150h/300h/500h)</span>
         </div>
       </div>
       <div class="days-left">
@@ -172,6 +174,7 @@
   </div>
 
   <div id="rakkyo-tab-saki" class="hidden">
+    <!-- さきちゃんの最近の活動へのリアクション -->
     <div id="saki-activity-for-rakkyo"></div>
   </div>
 </div>
@@ -196,7 +199,7 @@
   <div id="saki-tab-self">
     <div class="card">
       <div class="card-title">活動・筋トレを記録</div>
-      <div class="input-group" style="background:var(--bg); border-radius:10px; margin-bottom:10px;">
+      <div class="input-group" style="background:var(--bg); margin-bottom:10px;">
         <input type="text" id="saki-menu-input" placeholder="メニュー (例: スクワット30回)" style="padding:12px; width:100%; border:none; background:transparent;">
       </div>
       <div class="input-row">
@@ -236,17 +239,13 @@
     "できると信じれば、もう半分は終わったようなものだ。",
     "成功とは、小さな努力の積み重ねだ。",
     "今日できることを明日に延ばしてはいけない。",
-    "最大の弱点は諦めることにある。",
     "行動こそがすべての成功の鍵である。",
     "進み続けていれば、どんなに遅くても関係ない。"
   ];
 
   let records = [], reactions = [], activities = [], currentRole = null, pendingPhoto = {};
 
-  const getTodayStr = () => {
-    const n = new Date();
-    return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
-  };
+  const getTodayStr = () => new Date().toLocaleDateString('sv-SE');
 
   async function fetchAll() {
     const [r1, r2, r3] = await Promise.all([
@@ -264,18 +263,19 @@
     const today = getTodayStr();
     const total = records.reduce((s, r) => s + parseFloat(r.hours), 0);
     const rakkyoToday = records.filter(r => r.date === today).reduce((s, r) => s + parseFloat(r.hours), 0);
-    const sakiLatest = activities.filter(a => a.who === 'saki')[0];
 
-    // Maxim
+    // 格言の表示
     const maxim = MAXIMS[new Date().getDate() % MAXIMS.length];
-    if(document.getElementById('maxim-rakkyo')) document.getElementById('maxim-rakkyo').textContent = maxim;
-    if(document.getElementById('maxim-saki')) document.getElementById('maxim-saki').textContent = maxim;
+    ['maxim-rakkyo', 'maxim-saki'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = maxim;
+    });
 
-    // Days Left
+    // カウントダウン
     const diff = Math.ceil((EXAM_DATE - new Date().setHours(0,0,0,0)) / 86400000);
     if(document.getElementById('days-num')) document.getElementById('days-num').textContent = diff;
 
-    // Pet Evolution
+    // ペット進化
     const petEmoji = total >= 500 ? '🕊️' : total >= 300 ? '🐓' : total >= 150 ? '🐥' : total >= 50 ? '🐣' : '🥚';
     if(document.getElementById('pet-rakkyo')) document.getElementById('pet-rakkyo').textContent = petEmoji;
 
@@ -299,7 +299,7 @@
     }
   }
 
-  // --- Actions ---
+  // --- 保存アクション ---
   async function saveRecord() {
     const h = parseFloat(document.getElementById('manual-hours').value);
     if (!h) return;
@@ -322,13 +322,13 @@
     const total = records.reduce((s, r) => s + parseFloat(r.hours), 0);
     const day = Math.ceil((EXAM_DATE - new Date()) / 86400000);
     let msg = "";
-    if (type === 'warn') msg = `💢 らっきょ！サボり禁止！試験まであと${day}日。現在${total.toFixed(1)}hだよ！`;
-    else if (type === 'praise') msg = `👏 らっきょ、すごい！頑張ってるね！現在${total.toFixed(1)}h！`;
+    if (type === 'warn') msg = `💢 らっきょ！サボり禁止！試験まであと${day}日。累計${total.toFixed(1)}hだよ！`;
+    else if (type === 'praise') msg = `👏 らっきょ、すごい！頑張ってるね！累計${total.toFixed(1)}h！`;
     else msg = `💌 らっきょ、お疲れ様。応援してるよ！試験まであと${day}日！`;
     window.open(`https://line.me/R/share?text=${encodeURIComponent(msg)}`);
   }
 
-  // --- Rendering ---
+  // --- レンダリング (リアクション含む) ---
   function renderRakkyoStudyTab() {
     const list = document.getElementById('records-list');
     list.innerHTML = records.slice(0, 10).map(r => `
@@ -343,9 +343,15 @@
     `).join('');
   }
 
+  // らっきょがさきちゃんの活動に対してリアクションを送る場所
   function renderSakiRoomForRakkyo() {
     const area = document.getElementById('saki-activity-for-rakkyo');
-    area.innerHTML = `<div class="card-title">さきちゃんの活動記録</div>` + activities.slice(0, 10).map(a => `
+    const sakiActs = activities.filter(a => a.who === 'saki');
+    if(sakiActs.length === 0) {
+      area.innerHTML = '<div class="card-title">さきちゃんの活動はまだありません</div>';
+      return;
+    }
+    area.innerHTML = `<div class="card-title">さきちゃんの活動記録</div>` + sakiActs.slice(0, 10).map(a => `
       <div class="action-card">
         <div class="action-header"><span>${a.date.slice(5)}</span><strong>✨ ${a.category} / ${parseFloat(a.hours).toFixed(1)}h</strong></div>
         <div class="reaction-buttons">${['👏','🔥','💪','👀'].map(e => `<button class="react-btn" onclick="addEmoji('${a.id}','${e}')">${e}</button>`).join('')}</div>
@@ -357,7 +363,8 @@
 
   function renderSakiSelfTab() {
     const list = document.getElementById('saki-my-records');
-    list.innerHTML = activities.filter(a=>a.who==='saki').slice(0, 10).map(a => `
+    const sakiActs = activities.filter(a => a.who === 'saki');
+    list.innerHTML = sakiActs.slice(0, 10).map(a => `
       <div class="action-card">
         <div class="action-header"><span>${a.date.slice(5)}</span><strong>${a.category} / ${parseFloat(a.hours).toFixed(1)}h</strong></div>
         ${renderReactionList(a.id)}
@@ -381,7 +388,7 @@
   function renderInteractionInput(tid) {
     return `
       <div class="msg-input-area">
-        <input type="text" id="input-${tid}" class="msg-input" placeholder="コメント...">
+        <input type="text" id="input-${tid}" class="msg-input" placeholder="コメントを送る...">
         <div style="display:flex; gap:8px;">
           <label style="flex:1; background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px; font-size:12px; text-align:center; cursor:pointer;">
             📷 写真<input type="file" accept="image/*" style="display:none" onchange="handlePhoto(event, '${tid}')">
@@ -392,7 +399,7 @@
       </div>`;
   }
 
-  // --- Common Interaction ---
+  // --- リアクション・共通処理 ---
   async function handlePhoto(e, tid) {
     const file = e.target.files[0]; if(!file) return;
     const reader = new FileReader();
@@ -405,7 +412,8 @@
 
   async function addEmoji(tid, emoji) {
     await sb.from('reactions').insert([{ record_id: tid, emoji: emoji }]);
-    showToast(emoji); fetchAll();
+    showToast(emoji + ' を送りました'); 
+    fetchAll();
   }
 
   async function sendComment(tid) {
@@ -416,7 +424,8 @@
     document.getElementById(`input-${tid}`).value = '';
     document.getElementById(`preview-${tid}`).innerHTML = '';
     delete pendingPhoto[tid];
-    showToast('送信しました！'); fetchAll();
+    showToast('コメントを送信しました！'); 
+    fetchAll();
   }
 
   function renderReactionList(tid) {
@@ -438,6 +447,7 @@
   }
 
   function switchRole() { if(confirm('切替えますか？')) { localStorage.removeItem('takken_role'); location.reload(); } }
+  
   function showTab(role, tab, el) {
     const root = document.getElementById(role + '-screen');
     root.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -446,7 +456,7 @@
     document.getElementById(`${role}-tab-${tab}`).classList.remove('hidden');
   }
 
-  async function deleteItem(table, id) { if(confirm('削除しますか？')) { await sb.from(table).delete().eq('id', id); fetchAll(); } }
+  async function deleteItem(table, id) { if(confirm('消去しますか？')) { await sb.from(table).delete().eq('id', id); fetchAll(); } }
   function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 
   const savedRole = localStorage.getItem('takken_role');
