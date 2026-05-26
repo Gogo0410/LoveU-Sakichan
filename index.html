@@ -5,13 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1a1d23">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>宅建600 - スケジュール完全同期版</title>
+<title>宅建600 - 究極統合版</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  /* --- 基本スタイル --- */
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   :root {
     --bg: #f5f1ea; --bg-card: #ffffff; --ink: #1a1d23; --ink-soft: #5c5f66;
@@ -27,270 +26,338 @@
   .brand .num { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
   .maxim-card { background: var(--ink); color: var(--bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: center; font-size: 13px; font-weight: 600; }
   
-  .tabs { display: flex; gap: 4px; margin-bottom: 15px; background: var(--bg-card); padding: 4px; border-radius: 12px; box-shadow: var(--shadow); }
-  .tab { flex: 1; padding: 10px; text-align: center; font-size: 11px; color: var(--ink-soft); border-radius: 8px; cursor: pointer; font-weight: 600; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 15px; background: var(--bg-card); padding: 4px; border-radius: 12px; box-shadow: var(--shadow); overflow-x: auto; }
+  .tab { flex: 1; min-width: 80px; padding: 10px 5px; text-align: center; font-size: 10px; color: var(--ink-soft); border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap; }
   .tab.active { background: var(--ink); color: var(--bg); }
 
   .card { background: var(--bg-card); border-radius: 16px; padding: 18px; margin-bottom: 15px; box-shadow: var(--shadow); }
-  .card-title { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 12px; border-left: 3px solid var(--accent); padding-left: 8px; }
+  .card-title { font-size: 11px; font-weight: 800; color: var(--accent); margin-bottom: 12px; letter-spacing: 0.1em; }
 
-  /* ミッション表示 */
-  .mission-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--line); }
-  .mission-item.done { opacity: 0.4; background: #f9f9f9; }
+  /* ミッション・記録 */
+  .mission-item, .record-item { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .mission-item { display: flex; align-items: center; justify-content: space-between; }
   .tag { font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-right: 6px; color: white; }
   .tag-new { background: var(--accent); }
   .tag-rev { background: var(--sub); }
-  .mission-name { font-size: 14px; font-weight: 700; }
-  .check-circle { width: 28px; height: 28px; border: 2px solid var(--line); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+  .check-circle { width: 28px; height: 28px; border: 2px solid var(--line); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .check-circle.active { background: var(--sub); border-color: var(--sub); color: white; }
 
   /* 進捗グリッド */
   .area-section { margin-bottom: 20px; }
-  .area-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
-  .lesson-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-  .lesson-label { font-size: 10px; min-width: 30px; font-weight: 700; color: var(--ink-soft); }
-  .step-grid { display: flex; gap: 3px; overflow-x: auto; flex: 1; padding-bottom: 2px; }
-  .step { width: 18px; height: 18px; background: #eee; border-radius: 3px; font-size: 8px; display: flex; align-items: center; justify-content: center; color: #aaa; flex-shrink: 0; }
-  .step.done { background: var(--sub); color: white; font-weight: 800; }
+  .area-title { font-size: 12px; font-weight: 800; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .lesson-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .lesson-label { font-size: 9px; min-width: 25px; font-weight: 700; color: var(--ink-soft); }
+  .step-grid { display: flex; gap: 2px; overflow-x: auto; }
+  .step { width: 16px; height: 16px; background: #eee; border-radius: 2px; font-size: 7px; display: flex; align-items: center; justify-content: center; color: #aaa; flex-shrink: 0; }
+  .step.done { background: var(--sub); color: white; }
 
-  .progress-bar { width: 100%; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sub), var(--accent)); transition: width 1s ease; }
-  .btn-submit { background: var(--ink); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 10px; }
+  /* LINE & 反応 */
+  .line-group { display: flex; gap: 6px; margin-top: 10px; }
+  .line-btn { flex: 1; border: none; border-radius: 8px; padding: 10px 0; color: white; font-size: 10px; font-weight: 700; cursor: pointer; }
+  .reaction-chip { background: var(--bg); padding: 5px 8px; border-radius: 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; border: 1px solid var(--line); }
+  .reaction-chip img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+  
+  .input-ui { background: var(--bg); padding: 12px; border-radius: 12px; margin-top: 10px; }
+  .duo-input { width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 8px; font-family: inherit; font-size: 13px; margin-bottom: 8px; }
+  .btn-submit { background: var(--ink); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; }
+
+  .progress-bar { width: 100%; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; margin: 8px 0; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sub), var(--accent)); transition: 1s; }
+  
   .hidden { display: none !important; }
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; font-size: 12px; z-index: 10000; opacity: 0; transition: 0.3s; pointer-events: none; }
-  .toast.show { opacity: 1; }
+  #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; font-size: 12px; z-index: 10000; opacity: 0; transition: 0.3s; pointer-events: none; }
+  #toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
 <div id="toast"></div>
 
-<!-- モード選択 -->
+<!-- 役割選択 -->
 <div id="role-screen" class="container">
   <div style="text-align:center; padding-top:100px;">
-    <div class="brand" style="font-size:32px; margin-bottom:30px;">宅建 <span class="num">600</span></div>
-    <button class="btn-submit" style="margin-bottom:15px; padding: 20px;" onclick="start('rakkyo')">らっきょ（勉強側）</button>
-    <button class="btn-submit" style="background:#eee; color:#333; padding: 20px;" onclick="start('saki')">さきちゃん（応援側）</button>
+    <div class="brand" style="font-size:32px; margin-bottom:40px;">宅建 <span class="num">600</span></div>
+    <button class="btn-submit" style="padding:20px; margin-bottom:15px;" onclick="init('rakkyo')">らっきょ（勉強側）</button>
+    <button class="btn-submit" style="padding:20px; background:#eee; color:#333;" onclick="init('saki')">さきちゃん（応援側）</button>
   </div>
 </div>
 
-<!-- メイン画面 -->
+<!-- アプリメイン -->
 <div id="app-screen" class="container hidden">
   <header>
     <div class="brand">宅建 <span class="num">600</span></div>
     <button onclick="localStorage.removeItem('takken_role');location.reload();" style="position:absolute; left:0; top:0; background:none; border:none; font-size:10px; color:var(--ink-faint);">切替</button>
   </header>
 
-  <div class="maxim-card" id="daily-maxim">...</div>
+  <div class="maxim-card" id="maxim-text">...</div>
 
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('mission', this)">ミッション</div>
-    <div class="tab" onclick="switchTab('study', this)">勉強記録</div>
-    <div class="tab" onclick="switchTab('progress', this)">全進捗</div>
+  <!-- タブ切り替え（役割によって中身が変わる） -->
+  <div id="rakkyo-tabs" class="tabs hidden">
+    <div class="tab active" onclick="switchTab('rakkyo-mission', this)">ミッション</div>
+    <div class="tab" onclick="switchTab('rakkyo-study', this)">勉強記録</div>
+    <div class="tab" onclick="switchTab('rakkyo-saki', this)">さきちゃん</div>
+    <div class="tab" onclick="switchTab('rakkyo-all', this)">全進捗</div>
   </div>
 
-  <div id="tab-mission">
-    <div class="card">
-      <div class="card-title">今日の学習（CSV同期版）</div>
-      <div id="mission-list"></div>
-    </div>
+  <div id="saki-tabs" class="tabs hidden">
+    <div class="tab active" onclick="switchTab('saki-self', this)">自分の活動</div>
+    <div class="tab" onclick="switchTab('saki-watch', this)">らっきょ監視</div>
   </div>
 
-  <div id="tab-study" class="hidden">
+  <!-- --- RAKKYO VIEWS --- -->
+  <div id="rakkyo-mission" class="view">
+    <div class="card"><div class="card-title">TODAY'S TASK</div><div id="mission-list"></div></div>
+  </div>
+
+  <div id="rakkyo-study" class="view hidden">
     <div class="card">
-      <div class="card-title">宅建600 進捗</div>
-      <div class="progress-bar"><div id="main-bar" class="progress-fill" style="width:0%"></div></div>
+      <div class="card-title">TOTAL PROGRESS</div>
+      <div style="font-size:24px; text-align:center; margin-bottom:5px;" id="pet-char">🥚</div>
+      <div class="progress-bar"><div id="bar-r" class="progress-fill"></div></div>
       <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700;">
-        <span>合計: <span id="total-h">0</span> / 600h</span>
-        <span id="days-left">?</span>
+        <span><span id="total-r-h">0</span> / 600h</span>
+        <span id="days-r">試験まで ? 日</span>
+      </div>
+      <div class="input-ui">
+        <input type="number" id="manual-h-r" class="duo-input" placeholder="手動入力 (h)" step="0.1">
+        <button class="btn-submit" onclick="addStudyManual()">記録</button>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title">手動で時間を記録</div>
-      <div style="display:flex; gap:8px;">
-        <input type="number" id="h-input" style="flex:1; border:1px solid var(--line); border-radius:10px; padding:10px; text-align:center;" placeholder="0.0" step="0.1">
-        <button class="btn-submit" style="width:auto; margin-top:0;" onclick="addStudy()">保存</button>
-      </div>
-    </div>
-    <div id="study-history"></div>
+    <div id="rakkyo-my-history"></div>
   </div>
 
-  <div id="tab-progress" class="hidden">
-    <div class="card">
-      <div id="full-progress-view"></div>
-    </div>
+  <div id="rakkyo-saki" class="view hidden">
+    <div class="card-title">さきちゃんの最近の活動</div>
+    <div id="saki-activity-feed"></div>
   </div>
+
+  <div id="rakkyo-all" class="view hidden">
+    <div class="card"><div id="all-progress-grid"></div></div>
+  </div>
+
+  <!-- --- SAKI VIEWS --- -->
+  <div id="saki-self" class="view hidden">
+    <div class="card">
+      <div class="card-title">今日の活動を入力</div>
+      <input type="text" id="saki-menu" class="duo-input" placeholder="メニュー (例: 腹筋30回)">
+      <input type="number" id="saki-h" class="duo-input" placeholder="時間(h) 任意" step="0.1">
+      <button class="btn-submit" onclick="addSakiActivity()">記録する</button>
+    </div>
+    <div id="saki-my-history"></div>
+  </div>
+
+  <div id="saki-watch" class="view hidden">
+    <div class="card">
+      <div class="card-title">らっきょの進捗</div>
+      <div style="font-weight:800; font-size:18px;"><span id="pct-s">0</span>% (<span id="total-s">0</span>h)</div>
+      <div class="progress-bar"><div id="bar-s" class="progress-fill"></div></div>
+      <div class="line-group">
+        <button class="line-btn" style="background:#c8463a;" onclick="sendLine('warn')">💢 喝</button>
+        <button class="line-btn" style="background:#4a6741;" onclick="sendLine('praise')">👏 褒める</button>
+        <button class="line-btn" style="background:#b8893c;" onclick="sendLine('cheer')">💌 応援</button>
+      </div>
+    </div>
+    <div class="card-title">らっきょの勉強ログ</div>
+    <div id="rakkyo-study-feed"></div>
+  </div>
+
 </div>
 
 <script>
   const sb = supabase.createClient('https://tsromnwejzanfboeminq.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcm9tbndlanphbmZib2VtaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMzc4MDcsImV4cCI6MjA5NDkxMzgwN30.GKaO7VUj4Rd5vxQ-FvSFjO8QmxuBUyKAdeohm3c1lps');
   const EXAM_DATE = new Date(2026, 9, 14);
-  const MAXIMS = ["忘れるのは当たり前。繰り返すのが天才の証。", "昨日の自分より1ミリ前へ！", "一歩一歩が合格への唯一の道。"];
-  
-  // CSVのルールに基づいた復習間隔（日）
   const REVIEWS = [0, 1, 4, 9, 16, 30, 44, 58, 72, 86, 100, 114, 128]; 
-
-  // --- CSVの全開始日データを定義 ---
-  const RAW_START_DATES = {
-    "宅建業法": {
-        "L1":"2026/05/25","L2":"2026/05/26","L3":"2026/05/27","L4":"2026/05/28","L5":"2026/05/29",
-        "L6":"2026/05/30","L7":"2026/05/31","L8":"2026/06/01","L9":"2026/06/02","L10":"2026/06/03",
-        "L11":"2026/06/04","L12":"2026/06/05","L13":"2026/06/06","L14":"2026/06/07","L15":"2026/06/08",
-        "L16":"2026/05/26","L17":"2026/05/27","L18":"2026/05/28","L19":"2026/05/29"
-    },
-    "権利関係": {
-        "L1":"2026/05/30","L2":"2026/05/31","L3":"2026/06/01","L4":"2026/06/02","L5":"2026/06/03",
-        "L6":"2026/06/04","L7":"2026/06/05","L8":"2026/06/06","L9":"2026/06/07","L10":"2026/06/08",
-        "L11":"2026/06/09","L12":"2026/06/10","L13":"2026/06/11","L14":"2026/06/12","L15":"2026/06/13",
-        "L16":"2026/06/14","L17":"2026/06/15","L18":"2026/06/16","L19":"2026/06/17","L20":"2026/06/18"
-    },
-    "法令上の制限": {
-        "L1":"2026/06/19","L2":"2026/06/20","L3":"2026/06/21","L4":"2026/06/22","L5":"2026/06/23",
-        "L6":"2026/06/24","L7":"2026/06/25","L8":"2026/06/26","L9":"2026/06/27"
-    },
-    "税・その他": {
-        "L1":"2026/06/28","L2":"2026/06/29","L3":"2026/06/30","L4":"2026/07/01","L5":"2026/07/02",
-        "L6":"2026/07/03","L7":"2026/07/04","L8":"2026/07/05","L9":"2026/07/06","L10":"2026/07/07",
-        "L11":"2026/07/08","L12":"2026/07/09"
-    }
+  const START_DATES = {
+    "宅建業法": { "L1":"2026/05/25","L2":"2026/05/26","L3":"2026/05/27","L4":"2026/05/28","L5":"2026/05/29","L6":"2026/05/30","L7":"2026/05/31","L8":"2026/06/01","L9":"2026/06/02","L10":"2026/06/03","L11":"2026/06/04","L12":"2026/06/05","L13":"2026/06/06","L14":"2026/06/07","L15":"2026/06/08","L16":"2026/05/26","L17":"2026/05/27","L18":"2026/05/28","L19":"2026/05/29" },
+    "権利関係": { "L1":"2026/05/30","L2":"2026/05/31","L3":"2026/06/01","L4":"2026/06/02","L5":"2026/06/03","L6":"2026/06/04","L7":"2026/06/05","L8":"2026/06/06","L9":"2026/06/07","L10":"2026/06/08","L11":"2026/06/09","L12":"2026/06/10","L13":"2026/06/11","L14":"2026/06/12","L15":"2026/06/13","L16":"2026/06/14","L17":"2026/06/15","L18":"2026/06/16","L19":"2026/06/17","L20":"2026/06/18" },
+    "法令上の制限": { "L1":"2026/06/19","L2":"2026/06/20","L3":"2026/06/21","L4":"2026/06/22","L5":"2026/06/23","L6":"2026/06/24","L7":"2026/06/25","L8":"2026/06/26","L9":"2026/06/27" },
+    "税・その他": { "L1":"2026/06/28","L2":"2026/06/29","L3":"2026/06/30","L4":"2026/07/01","L5":"2026/07/02","L6":"2026/07/03","L7":"2026/07/04","L8":"2026/07/05","L9":"2026/07/06","L10":"2026/07/07","L11":"2026/07/08","L12":"2026/07/09" }
   };
 
-  let MASTER_SCHEDULE = [];
-  let completions = [], records = [], role = null;
+  let MASTER = [], records = [], reactions = [], activities = [], completions = [], role = null, pendingPhoto = {};
 
-  function start(r) {
+  async function init(r) {
     role = r; localStorage.setItem('takken_role', r);
     document.getElementById('role-screen').classList.add('hidden');
     document.getElementById('app-screen').classList.remove('hidden');
-    document.getElementById('daily-maxim').textContent = MAXIMS[new Date().getDate() % MAXIMS.length];
-    buildSchedule();
-    loadData();
+    document.getElementById(r + '-tabs').classList.remove('hidden');
+    document.getElementById('maxim-text').textContent = ["昨日の自分より1ミリ前へ！", "忘れるのは当たり前。繰り返すのが天才。"][new Date().getDate() % 2];
+    buildMaster();
+    await cleanup();
+    fetchAll();
   }
 
-  // 全スケジュールの構築
-  function buildSchedule() {
-    MASTER_SCHEDULE = [];
-    for (const [area, lessons] of Object.entries(RAW_START_DATES)) {
-      for (const [lesson, startStr] of Object.entries(lessons)) {
-        const baseDate = new Date(startStr);
-        const dateList = REVIEWS.map(offset => {
-          let d = new Date(baseDate);
-          d.setDate(d.getDate() + offset);
-          return d.toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'/');
+  function buildMaster() {
+    MASTER = [];
+    for(let area in START_DATES) {
+      for(let lesson in START_DATES[area]) {
+        let base = new Date(START_DATES[area][lesson]);
+        let dates = REVIEWS.map(offset => {
+          let d = new Date(base); d.setDate(d.getDate()+offset);
+          return d.toLocaleDateString('sv-SE');
         });
-        MASTER_SCHEDULE.push({ area, lesson, dates: dateList });
+        MASTER.push({ area, lesson, dates });
       }
     }
   }
 
-  async function loadData() {
-    const [cData, rData] = await Promise.all([
-      sb.from('task_completions').select('*'),
-      sb.from('records').select('*').order('created_at', {ascending: false})
+  async function fetchAll() {
+    const [r1, r2, r3, r4] = await Promise.all([
+      sb.from('records').select('*').order('created_at',{ascending:false}),
+      sb.from('reactions').select('*').order('created_at',{ascending:false}),
+      sb.from('activities').select('*').order('created_at',{ascending:false}),
+      sb.from('task_completions').select('*')
     ]);
-    completions = cData.data || [];
-    records = rData.data || [];
+    records = r1.data||[]; reactions = r2.data||[]; activities = r3.data||[]; completions = r4.data||[];
     updateUI();
   }
 
   function updateUI() {
-    const today = new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'/');
-    const total = records.reduce((s, r) => s + parseFloat(r.hours), 0);
-    
-    document.getElementById('total-h').textContent = total.toFixed(1);
-    document.getElementById('main-bar').style.width = Math.min(100, (total/600)*100) + '%';
-    const diff = Math.ceil((EXAM_DATE - new Date()) / 86400000);
-    document.getElementById('days-left').textContent = `試験日まであと ${diff} 日`;
+    const today = new Date().toLocaleDateString('sv-SE');
+    const totalH = records.reduce((s,r)=>s+parseFloat(r.hours),0);
+    const pct = Math.min(100, (totalH/600)*100);
+    const diff = Math.ceil((EXAM_DATE - new Date())/86400000);
 
-    renderMissions(today);
-    renderAllProgress();
-    renderStudyHistory();
+    // 進捗バー共通
+    ['bar-r','bar-s'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).style.width = pct+'%'; });
+    if(document.getElementById('total-r-h')) document.getElementById('total-r-h').textContent = totalH.toFixed(1);
+    if(document.getElementById('total-s')) document.getElementById('total-s').textContent = totalH.toFixed(1);
+    if(document.getElementById('pct-s')) document.getElementById('pct-s').textContent = pct.toFixed(1);
+    if(document.getElementById('days-r')) document.getElementById('days-r').textContent = `試験まであと ${diff} 日`;
+    if(document.getElementById('pet-char')) document.getElementById('pet-char').textContent = totalH>=500?'🕊️':totalH>=300?'🐓':totalH>=150?'🐥':totalH>=50?'🐣':'🥚';
+
+    if(role==='rakkyo') {
+      renderMissions(today);
+      renderFeed('rakkyo-my-history', records, '🦉', true);
+      renderFeed('saki-activity-feed', activities, '✨', true);
+      renderAllProgress();
+    } else {
+      renderFeed('saki-my-history', activities, '✨', true);
+      renderFeed('rakkyo-study-feed', records, '🦉', true);
+    }
   }
 
   function renderMissions(today) {
-    const list = document.getElementById('mission-list');
+    const area = document.getElementById('mission-list');
     let html = '';
-    let foundCount = 0;
-
-    MASTER_SCHEDULE.forEach(item => {
-      item.dates.forEach((d, idx) => {
-        if (d === today) {
-          foundCount++;
-          const taskId = `${item.area}-${item.lesson}-${idx}`;
-          const isDone = completions.some(c => c.task_id === taskId);
-          html += `
-            <div class="mission-item ${isDone?'done':''}">
-              <div>
-                <span class="tag ${idx===0?'tag-new':'tag-rev'}">${idx===0?'新規':'復習'+idx}</span>
-                <span class="mission-name">${item.area} ${item.lesson}</span>
-              </div>
-              <div class="check-circle ${isDone?'active':''}" onclick="completeTask('${taskId}', ${isDone})">
-                ${isDone?'✔':''}
-              </div>
-            </div>`;
+    MASTER.forEach(m => {
+      m.dates.forEach((d, i) => {
+        if(d === today) {
+          const tid = `${m.area}-${m.lesson}-${i}`;
+          const done = completions.some(c=>c.task_id===tid);
+          html += `<div class="mission-item ${done?'done':''}"><div><span class="tag ${i===0?'tag-new':'tag-rev'}">${i===0?'新規':'復習'+i}</span><strong>${m.area} ${m.lesson}</strong></div><div class="check-circle ${done?'active':''}" onclick="completeTask('${tid}',${done})">${done?'✔':''}</div></div>`;
         }
       });
     });
-    list.innerHTML = html || '<p style="text-align:center; padding:20px; color:#aaa; font-size:12px;">今日の予定はありません。</p>';
+    area.innerHTML = html || '<p style="text-align:center;padding:20px;color:#aaa;font-size:12px;">今日の予定はありません。</p>';
   }
 
-  async function completeTask(id, isAlreadyDone) {
-    if (isAlreadyDone) return;
-    await sb.from('task_completions').insert([{ task_id: id }]);
-    const h = prompt("この学習の時間は？(h)\n※0ならキャンセル", "0.5");
-    if (h && parseFloat(h) > 0) {
-      await sb.from('records').insert([{ date: new Date().toLocaleDateString('sv-SE'), hours: parseFloat(h) }]);
-    }
-    showToast("完了しました！");
-    loadData();
+  function renderFeed(id, data, emoji, canReply) {
+    const area = document.getElementById(id);
+    area.innerHTML = data.slice(0,10).map(d => {
+      const tid = d.id;
+      const title = d.category ? d.category : '宅建勉強';
+      return `<div class="action-card">
+        <div class="action-header"><span>${d.date.slice(5)}</span><strong>${emoji} ${title} / ${parseFloat(d.hours).toFixed(1)}h</strong></div>
+        <div class="reaction-buttons">${['👏','🔥','💪','👀'].map(e=>`<button class="react-btn" onclick="addEmoji('${tid}','${e}')">${e}</button>`).join('')}</div>
+        <div class="record-reactions">${reactions.filter(r=>r.record_id===tid).map(r=>`<span class="reaction-chip">${r.emoji||'💬'} ${r.message||''} ${r.photo_data?`<img src="${r.photo_data}" onclick="window.open(this.src)">`:''}</span>`).join('')}</div>
+        <div class="input-ui"><input type="text" id="in-${tid}" class="duo-input" style="font-size:11px;" placeholder="コメント..."><div style="display:flex;gap:5px;"><label style="flex:1;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:11px;text-align:center;">📷 写真<input type="file" style="display:none" onchange="handlePhoto(event,'${tid}')"></label><button class="btn-submit" style="flex:1" onclick="sendReply('${tid}')">送信</button></div><div id="pre-${tid}"></div></div>
+        ${role==='rakkyo'&&id.includes('my') || role==='saki'&&id.includes('my') ? `<div style="text-align:right;margin-top:10px;"><button style="border:none;background:none;color:red;font-size:10px;" onclick="deleteItem('${id.includes('activity')?'activities':'records'}','${tid}')">消去</button></div>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  // --- アクション系 ---
+  async function completeTask(tid, done) {
+    if(done) return;
+    await sb.from('task_completions').insert([{task_id: tid}]);
+    let h = prompt("勉強時間は？(h)","0.5");
+    if(h && parseFloat(h)>0) await sb.from('records').insert([{date: new Date().toLocaleDateString('sv-SE'), hours: parseFloat(h)}]);
+    toast("完了！"); fetchAll();
+  }
+
+  async function addStudyManual() {
+    let h = parseFloat(document.getElementById('manual-h-r').value);
+    if(!h) return;
+    await sb.from('records').insert([{date: new Date().toLocaleDateString('sv-SE'), hours: h}]);
+    document.getElementById('manual-h-r').value = '';
+    toast("記録完了！"); fetchAll();
+  }
+
+  async function addSakiActivity() {
+    let m = document.getElementById('saki-menu').value;
+    let h = parseFloat(document.getElementById('saki-h').value)||0;
+    if(!m) return toast("メニューを入れてね");
+    await sb.from('activities').insert([{who:'saki', category:m, date: new Date().toLocaleDateString('sv-SE'), hours: h}]);
+    document.getElementById('saki-menu').value = ''; document.getElementById('saki-h').value = '';
+    toast("記録完了！ ✨"); fetchAll();
+  }
+
+  async function addEmoji(tid, e) { await sb.from('reactions').insert([{record_id:tid, emoji:e}]); fetchAll(); }
+
+  async function sendReply(tid) {
+    let val = document.getElementById(`in-${tid}`).value;
+    let photo = pendingPhoto[tid];
+    if(!val && !photo) return;
+    await sb.from('reactions').insert([{record_id:tid, message:val, photo_data:photo}]);
+    delete pendingPhoto[tid]; fetchAll(); toast("送信完了");
+  }
+
+  async function handlePhoto(e, tid) {
+    const file = e.target.files[0]; if(!file) return;
+    toast("圧縮中...");
+    const reader = new FileReader(); reader.readAsDataURL(file);
+    reader.onload = (ev) => {
+      const img = new Image(); img.src = ev.target.result;
+      img.onload = () => {
+        const cvs = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        if(w>500){ h*=500/w; w=500; }
+        cvs.width=w; cvs.height=h;
+        cvs.getContext('2d').drawImage(img,0,0,w,h);
+        pendingPhoto[tid] = cvs.toDataURL('image/jpeg', 0.6);
+        document.getElementById(`pre-${tid}`).innerHTML = `<img src="${pendingPhoto[tid]}" style="width:100px;margin-top:10px;border-radius:5px;">`;
+      };
+    };
+  }
+
+  function sendLine(type) {
+    const h = records.reduce((s,r)=>s+parseFloat(r.hours),0).toFixed(1);
+    const d = Math.ceil((EXAM_DATE - new Date())/86400000);
+    const msg = type==='warn' ? `💢 らっきょ！サボり禁止！試験まであと${d}日。累計${h}hだよ！` : (type==='praise'? `👏 らっきょ、すごい！頑張ってるね！累計${h}h！`: `💌 らっきょ、お疲れ様。応援してるよ！試験まであと${d}日！`);
+    window.open(`https://line.me/R/share?text=${encodeURIComponent(msg)}`);
   }
 
   function renderAllProgress() {
-    const areaView = document.getElementById('full-progress-view');
-    const areas = ["宅建業法", "権利関係", "法令上の制限", "税・その他"];
+    const area = document.getElementById('all-progress-grid');
     let html = '';
-
-    areas.forEach(areaName => {
-      html += `<div class="area-section"><div class="area-title">${areaName}</div>`;
-      MASTER_SCHEDULE.filter(s => s.area === areaName).sort((a,b)=> parseInt(a.lesson.substring(1)) - parseInt(b.lesson.substring(1))).forEach(s => {
-        const steps = s.dates.map((d, idx) => {
-          const isDone = completions.some(c => c.task_id === `${s.area}-${s.lesson}-${idx}`);
-          return `<div class="step ${isDone?'done':''}">${idx===0?'新':idx}</div>`;
+    ["宅建業法","権利関係","法令上の制限","税・その他"].forEach(a => {
+      html += `<div class="area-section"><div class="area-title">${a}</div>`;
+      MASTER.filter(m=>m.area===a).forEach(m=>{
+        const steps = m.dates.map((d,i)=>{
+          const done = completions.some(c=>c.task_id===`${m.area}-${m.lesson}-${i}`);
+          return `<div class="step ${done?'done':''}">${i===0?'新':i}</div>`;
         }).join('');
-        html += `<div class="lesson-row"><div class="lesson-label">${s.lesson}</div><div class="step-grid">${steps}</div></div>`;
+        html += `<div class="lesson-row"><div class="lesson-label">${m.lesson}</div><div class="step-grid">${steps}</div></div>`;
       });
       html += `</div>`;
     });
-    areaView.innerHTML = html;
+    area.innerHTML = html;
   }
 
-  function renderStudyHistory() {
-    const list = document.getElementById('study-history');
-    list.innerHTML = `<div class="card-title" style="margin-top:10px;">直近の履歴</div>` + records.slice(0, 5).map(r => `<div style="font-size:11px; display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #eee;"><span>${r.date}</span><span>${parseFloat(r.hours).toFixed(1)}h</span></div>`).join('');
-  }
-
-  async function addStudy() {
-    const h = parseFloat(document.getElementById('h-input').value);
-    if (!h) return;
-    await sb.from('records').insert([{ date: new Date().toLocaleDateString('sv-SE'), hours: h }]);
-    document.getElementById('h-input').value = '';
-    showToast("記録しました！"); loadData();
-  }
-
-  function switchTab(t, el) {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  // --- 共通ツール ---
+  function switchTab(id, el) {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     el.classList.add('active');
-    ['mission','study','progress'].forEach(tab => document.getElementById('tab-'+tab).classList.add('hidden'));
-    document.getElementById('tab-' + t).classList.remove('hidden');
+    document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
   }
-
-  function showToast(m) {
-    const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2000);
-  }
+  async function cleanup() { const ago = new Date(Date.now()-48*60*60*1000).toISOString(); await sb.from('reactions').delete().lt('created_at', ago); }
+  async function deleteItem(table, id) { if(confirm('消去しますか？')){ await sb.from(table).delete().eq('id',id); fetchAll(); } }
+  function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
 
   const saved = localStorage.getItem('takken_role');
-  if (saved) start(saved);
+  if(saved) init(saved);
 </script>
 </body>
 </html>
