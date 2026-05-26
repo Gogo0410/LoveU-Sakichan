@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1a1d23">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>宅建600 - らっきょ&さき 効率運用版</title>
+<title>宅建600 - スケジュール完全同期版</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+  /* --- 基本スタイル --- */
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   :root {
     --bg: #f5f1ea; --bg-card: #ffffff; --ink: #1a1d23; --ink-soft: #5c5f66;
@@ -18,353 +19,278 @@
     --sub: #4a6741; --line: #e5dfd4;
     --shadow: 0 1px 3px rgba(26, 29, 35, 0.04), 0 2px 8px rgba(26, 29, 35, 0.04);
   }
-  body {
-    font-family: 'Noto Serif JP', serif; background: var(--bg); color: var(--ink);
-    line-height: 1.5; min-height: 100vh; padding-bottom: 80px;
-    background-image: radial-gradient(circle at 20% 10%, rgba(200, 70, 58, 0.03) 0%, transparent 40%);
-  }
+  body { font-family: 'Noto Serif JP', serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; padding-bottom: 100px; background-image: radial-gradient(circle at 20% 10%, rgba(200, 70, 58, 0.03) 0%, transparent 40%); }
   .container { max-width: 480px; margin: 0 auto; padding: 20px 18px; }
 
-  /* 格言カード */
-  .maxim-card { background: var(--ink); color: var(--bg); border-radius: 16px; padding: 18px; margin-bottom: 16px; text-align: center; }
-  .maxim-label { font-size: 10px; letter-spacing: 0.2em; opacity: 0.7; margin-bottom: 8px; display: block; }
-  .maxim-text { font-size: 14px; font-weight: 600; line-height: 1.6; }
-
-  /* モード選択 */
-  .mode-select { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-  .mode-brand { font-size: 28px; font-weight: 700; margin-bottom: 30px; }
-  .mode-btn { width: 280px; padding: 20px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); }
-  .mode-btn.rakkyo { background: var(--ink); color: var(--bg); }
-  .mode-btn.saki { background: linear-gradient(135deg, #e8c5c0, #f5d4cf); border-color: transparent; }
-
-  header { text-align: center; padding: 12px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 20px; position: relative; }
-  .role-badge { position: absolute; top: 0; right: 0; font-size: 10px; padding: 4px 10px; border-radius: 12px; background: var(--ink); color: var(--bg); }
-  .role-badge.saki { background: var(--accent); }
-  .switch-btn { position: absolute; top: 0; left: 0; font-size: 11px; background: transparent; border: 1px solid var(--line); padding: 4px 10px; border-radius: 12px; color: var(--ink-soft); cursor: pointer; }
+  header { text-align: center; padding: 12px 0; border-bottom: 1px solid var(--line); margin-bottom: 15px; position: relative; }
   .brand { font-size: 24px; font-weight: 700; }
   .brand .num { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
-
-  .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: var(--bg-card); padding: 4px; border-radius: 12px; box-shadow: var(--shadow); }
-  .tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; color: var(--ink-soft); border-radius: 8px; cursor: pointer; font-weight: 600; }
+  .maxim-card { background: var(--ink); color: var(--bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: center; font-size: 13px; font-weight: 600; }
+  
+  .tabs { display: flex; gap: 4px; margin-bottom: 15px; background: var(--bg-card); padding: 4px; border-radius: 12px; box-shadow: var(--shadow); }
+  .tab { flex: 1; padding: 10px; text-align: center; font-size: 11px; color: var(--ink-soft); border-radius: 8px; cursor: pointer; font-weight: 600; }
   .tab.active { background: var(--ink); color: var(--bg); }
 
-  .card { background: var(--bg-card); border-radius: 16px; padding: 22px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
-  .card-title { font-size: 12px; letter-spacing: 0.2em; color: var(--ink-soft); margin-bottom: 12px; }
+  .card { background: var(--bg-card); border-radius: 16px; padding: 18px; margin-bottom: 15px; box-shadow: var(--shadow); }
+  .card-title { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 12px; border-left: 3px solid var(--accent); padding-left: 8px; }
 
-  /* 進化たまご */
-  .pet-area { display: flex; align-items: center; gap: 15px; padding: 10px 0; margin-bottom: 15px; border-bottom: 1px dashed var(--line); }
-  .pet-emoji { font-size: 40px; }
-  .pet-info { font-size: 11px; color: var(--ink-soft); line-height: 1.4; }
+  /* ミッション表示 */
+  .mission-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--line); }
+  .mission-item.done { opacity: 0.4; background: #f9f9f9; }
+  .tag { font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-right: 6px; color: white; }
+  .tag-new { background: var(--accent); }
+  .tag-rev { background: var(--sub); }
+  .mission-name { font-size: 14px; font-weight: 700; }
+  .check-circle { width: 28px; height: 28px; border: 2px solid var(--line); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+  .check-circle.active { background: var(--sub); border-color: var(--sub); color: white; }
 
-  .days-left { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
-  .days-num { font-family: 'JetBrains Mono', monospace; font-size: 56px; font-weight: 700; color: var(--accent); }
+  /* 進捗グリッド */
+  .area-section { margin-bottom: 20px; }
+  .area-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .lesson-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .lesson-label { font-size: 10px; min-width: 30px; font-weight: 700; color: var(--ink-soft); }
+  .step-grid { display: flex; gap: 3px; overflow-x: auto; flex: 1; padding-bottom: 2px; }
+  .step { width: 18px; height: 18px; background: #eee; border-radius: 3px; font-size: 8px; display: flex; align-items: center; justify-content: center; color: #aaa; flex-shrink: 0; }
+  .step.done { background: var(--sub); color: white; font-weight: 800; }
 
-  .progress-bar { width: 100%; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sub), var(--accent)); transition: width 0.6s ease; }
-  .progress-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 11px; text-align: center; }
-  .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600; }
-
-  /* 入力まわり */
-  .input-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-  .input-group { flex: 1; display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 0 12px; }
-  .input-group input { flex: 1; border: none; background: transparent; padding: 12px 0; font-family: inherit; font-size: 14px; outline: none; }
-  .btn-submit { background: var(--ink); color: var(--bg); border: none; padding: 12px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; }
-
-  /* LINE応援 */
-  .line-group { display: flex; gap: 6px; margin-top: 15px; }
-  .line-btn { flex: 1; border: none; border-radius: 8px; padding: 10px 5px; color: white; font-size: 11px; font-weight: 700; cursor: pointer; }
-  .btn-warn { background: #c8463a; }
-  .btn-praise { background: #4a6741; }
-  .btn-cheer { background: #b8893c; }
-
-  /* 記録カード */
-  .record-item { padding: 16px 0; border-bottom: 1px solid var(--line); }
-  .record-main { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px; }
-  .record-time { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
-  .record-delete { background: none; border: none; color: var(--ink-faint); font-size: 16px; cursor: pointer; }
-
-  .action-card { background: var(--bg-card); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid var(--line); }
-  .action-header { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 12px; font-weight: 700; }
-  .react-btn { background: var(--bg); border: 1px solid var(--line); padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 16px; }
-  
-  .record-reactions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .reaction-chip { background: var(--bg); padding: 6px 10px; border-radius: 10px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); }
-  .reaction-chip img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; display: block; }
-
-  .msg-input-area { background: var(--bg); padding: 12px; border-radius: 12px; margin-top: 10px; }
-  .msg-input { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; font-family: inherit; font-size: 13px; outline: none; margin-bottom: 8px; }
-  .msg-send-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-  .photo-preview { margin-top: 10px; width: 100%; max-width: 150px; border-radius: 8px; display: block; }
-
-  .partner-card { background: linear-gradient(135deg, #fff5f3, #fef0ec); border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; }
-  .partner-title { font-size: 11px; color: var(--accent); margin-bottom: 4px; font-weight: 700; }
-
+  .progress-bar { width: 100%; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sub), var(--accent)); transition: width 1s ease; }
+  .btn-submit { background: var(--ink); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 10px; }
   .hidden { display: none !important; }
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: var(--bg); padding: 12px 24px; border-radius: 30px; font-size: 13px; font-weight: 600; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: 0.3s; z-index: 9999; text-align: center; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; font-size: 12px; z-index: 10000; opacity: 0; transition: 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
-<div id="mode-screen" class="container">
-  <div class="mode-select">
-    <div class="mode-brand">宅建 <span class="num">600</span></div>
-    <button class="mode-btn rakkyo" onclick="setRole('rakkyo')">らっきょ（勉強側）</button>
-    <button class="mode-btn saki" onclick="setRole('saki')">さきちゃん（筋トレ・応援側）</button>
+<div id="toast"></div>
+
+<!-- モード選択 -->
+<div id="role-screen" class="container">
+  <div style="text-align:center; padding-top:100px;">
+    <div class="brand" style="font-size:32px; margin-bottom:30px;">宅建 <span class="num">600</span></div>
+    <button class="btn-submit" style="margin-bottom:15px; padding: 20px;" onclick="start('rakkyo')">らっきょ（勉強側）</button>
+    <button class="btn-submit" style="background:#eee; color:#333; padding: 20px;" onclick="start('saki')">さきちゃん（応援側）</button>
   </div>
 </div>
 
-<div id="rakkyo-screen" class="container hidden">
+<!-- メイン画面 -->
+<div id="app-screen" class="container hidden">
   <header>
-    <button class="switch-btn" onclick="switchRole()">切替</button>
-    <span class="role-badge">らっきょ</span>
     <div class="brand">宅建 <span class="num">600</span></div>
+    <button onclick="localStorage.removeItem('takken_role');location.reload();" style="position:absolute; left:0; top:0; background:none; border:none; font-size:10px; color:var(--ink-faint);">切替</button>
   </header>
-  <div class="maxim-card">
-    <span class="maxim-label">TODAY'S MAXIM</span>
-    <div id="maxim-rakkyo" class="maxim-text">...</div>
-  </div>
+
+  <div class="maxim-card" id="daily-maxim">...</div>
+
   <div class="tabs">
-    <div class="tab active" onclick="showTab('rakkyo', 'study', this)">勉強記録</div>
-    <div class="tab" onclick="showTab('rakkyo', 'saki', this)">さきちゃんルーム</div>
+    <div class="tab active" onclick="switchTab('mission', this)">ミッション</div>
+    <div class="tab" onclick="switchTab('study', this)">勉強記録</div>
+    <div class="tab" onclick="switchTab('progress', this)">全進捗</div>
   </div>
-  <div id="rakkyo-tab-study">
-    <div class="partner-card"><div class="partner-title">SAKI'S TODAY</div><div id="partner-stats-rakkyo">—</div></div>
-    <div class="card countdown-card">
-      <div class="pet-area"><span id="pet-rakkyo" class="pet-emoji">🥚</span><div class="pet-info"><strong>たまごの成長</strong><br>らっきょの勉強合計で進化！</div></div>
-      <div class="days-left"><span class="days-num" id="days-num">—</span><span style="font-size:16px;color:var(--ink-soft)">日</span></div>
-    </div>
+
+  <div id="tab-mission">
     <div class="card">
-      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
-      <div class="progress-stats">
-        <div class="stat"><div>合計</div><div id="total-hours" class="stat-value">—</div></div>
-        <div class="stat"><div>残り</div><div id="remain-hours" class="stat-value" style="color:var(--accent)">—</div></div>
-        <div class="stat"><div>今日</div><div id="today-hours" class="stat-value">—</div></div>
+      <div class="card-title">今日の学習（CSV同期版）</div>
+      <div id="mission-list"></div>
+    </div>
+  </div>
+
+  <div id="tab-study" class="hidden">
+    <div class="card">
+      <div class="card-title">宅建600 進捗</div>
+      <div class="progress-bar"><div id="main-bar" class="progress-fill" style="width:0%"></div></div>
+      <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700;">
+        <span>合計: <span id="total-h">0</span> / 600h</span>
+        <span id="days-left">?</span>
       </div>
     </div>
-    <div class="card"><div class="card-title">勉強時間を入力</div><div class="input-row"><div class="input-group"><input type="number" id="manual-hours" placeholder="0.0" step="0.1"><span>h</span></div><button class="btn-submit" onclick="saveRecord()">記録</button></div></div>
-    <div id="records-list"></div>
-  </div>
-  <div id="rakkyo-tab-saki" class="hidden"><div id="saki-activity-for-rakkyo"></div></div>
-</div>
-
-<div id="saki-screen" class="container hidden">
-  <header>
-    <button class="switch-btn" onclick="switchRole()">切替</button>
-    <span class="role-badge saki">さきちゃん</span>
-    <div class="brand">さきちゃんの場所</div>
-  </header>
-  <div class="maxim-card">
-    <span class="maxim-label">TODAY'S MAXIM</span>
-    <div id="maxim-saki" class="maxim-text">...</div>
-  </div>
-  <div class="tabs">
-    <div class="tab active" onclick="showTab('saki', 'self', this)">自分の活動</div>
-    <div class="tab" onclick="showTab('saki', 'watch', this)">らっきょ監視</div>
-  </div>
-  <div id="saki-tab-self">
     <div class="card">
-      <div class="card-title">活動・筋トレを記録</div>
-      <div class="input-group" style="background:var(--bg); margin-bottom:10px;"><input type="text" id="saki-menu-input" placeholder="メニュー (例: スクワット30回)" style="padding:12px; width:100%; border:none; background:transparent;"></div>
-      <div class="input-row"><div class="input-group"><input type="number" id="saki-h-input" placeholder="時間(任意)" step="0.1"><span>h</span></div><button class="btn-submit" onclick="saveSakiActivity()">記録</button></div>
+      <div class="card-title">手動で時間を記録</div>
+      <div style="display:flex; gap:8px;">
+        <input type="number" id="h-input" style="flex:1; border:1px solid var(--line); border-radius:10px; padding:10px; text-align:center;" placeholder="0.0" step="0.1">
+        <button class="btn-submit" style="width:auto; margin-top:0;" onclick="addStudy()">保存</button>
+      </div>
     </div>
-    <div id="saki-my-records"></div>
+    <div id="study-history"></div>
   </div>
-  <div id="saki-tab-watch" class="hidden">
-    <div class="card"><div class="card-title">らっきょの進捗</div><div id="rakkyo-status-for-saki" style="font-weight:700; font-size:18px; margin-bottom:10px;">—</div><div class="progress-bar"><div id="saki-progress-fill" class="progress-fill"></div></div><div class="line-group"><button class="line-btn btn-warn" onclick="sendLine('warn')">💢 喝</button><button class="line-btn btn-praise" onclick="sendLine('praise')">👏 褒める</button><button class="line-btn btn-cheer" onclick="sendLine('cheer')">💌 応援</button></div></div>
-    <div id="rakkyo-records-for-saki"></div>
+
+  <div id="tab-progress" class="hidden">
+    <div class="card">
+      <div id="full-progress-view"></div>
+    </div>
   </div>
 </div>
-
-<div id="toast" class="toast"></div>
 
 <script>
-  const SUPABASE_URL = 'https://tsromnwejzanfboeminq.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcm9tbndlanphbmZib2VtaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMzc4MDcsImV4cCI6MjA5NDkxMzgwN30.GKaO7VUj4Rd5vxQ-FvSFjO8QmxuBUyKAdeohm3c1lps';
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+  const sb = supabase.createClient('https://tsromnwejzanfboeminq.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzcm9tbndlanphbmZib2VtaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMzc4MDcsImV4cCI6MjA5NDkxMzgwN30.GKaO7VUj4Rd5vxQ-FvSFjO8QmxuBUyKAdeohm3c1lps');
   const EXAM_DATE = new Date(2026, 9, 14);
-  const TARGET_HOURS = 600;
-  const MAXIMS = [
-    "やり遂げるまでは、いつも不可能に見えるものだ。",
-    "できると信じれば、もう半分は終わったようなものだ。",
-    "成功とは、小さな努力の積み重ねだ。",
-    "今日できることを明日に延ばしてはいけない。",
-    "最大の弱点は諦めることにある。",
-    "行動こそがすべての成功の鍵である。",
-    "進み続けていれば、どんなに遅くても関係ない。"
-  ];
+  const MAXIMS = ["忘れるのは当たり前。繰り返すのが天才の証。", "昨日の自分より1ミリ前へ！", "一歩一歩が合格への唯一の道。"];
+  
+  // CSVのルールに基づいた復習間隔（日）
+  const REVIEWS = [0, 1, 4, 9, 16, 30, 44, 58, 72, 86, 100, 114, 128]; 
 
-  let records = [], reactions = [], activities = [], currentRole = null, pendingPhoto = {};
-  const getTodayStr = () => new Date().toLocaleDateString('sv-SE');
+  // --- CSVの全開始日データを定義 ---
+  const RAW_START_DATES = {
+    "宅建業法": {
+        "L1":"2026/05/25","L2":"2026/05/26","L3":"2026/05/27","L4":"2026/05/28","L5":"2026/05/29",
+        "L6":"2026/05/30","L7":"2026/05/31","L8":"2026/06/01","L9":"2026/06/02","L10":"2026/06/03",
+        "L11":"2026/06/04","L12":"2026/06/05","L13":"2026/06/06","L14":"2026/06/07","L15":"2026/06/08",
+        "L16":"2026/05/26","L17":"2026/05/27","L18":"2026/05/28","L19":"2026/05/29"
+    },
+    "権利関係": {
+        "L1":"2026/05/30","L2":"2026/05/31","L3":"2026/06/01","L4":"2026/06/02","L5":"2026/06/03",
+        "L6":"2026/06/04","L7":"2026/06/05","L8":"2026/06/06","L9":"2026/06/07","L10":"2026/06/08",
+        "L11":"2026/06/09","L12":"2026/06/10","L13":"2026/06/11","L14":"2026/06/12","L15":"2026/06/13",
+        "L16":"2026/06/14","L17":"2026/06/15","L18":"2026/06/16","L19":"2026/06/17","L20":"2026/06/18"
+    },
+    "法令上の制限": {
+        "L1":"2026/06/19","L2":"2026/06/20","L3":"2026/06/21","L4":"2026/06/22","L5":"2026/06/23",
+        "L6":"2026/06/24","L7":"2026/06/25","L8":"2026/06/26","L9":"2026/06/27"
+    },
+    "税・その他": {
+        "L1":"2026/06/28","L2":"2026/06/29","L3":"2026/06/30","L4":"2026/07/01","L5":"2026/07/02",
+        "L6":"2026/07/03","L7":"2026/07/04","L8":"2026/07/05","L9":"2026/07/06","L10":"2026/07/07",
+        "L11":"2026/07/08","L12":"2026/07/09"
+    }
+  };
 
-  // ★ 自動クリーンアップ機能：48時間以上前のリアクションを削除
-  async function cleanupOldData() {
-    const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
-    const { error } = await sb.from('reactions').delete().lt('created_at', fortyEightHoursAgo);
-    if (!error) console.log('Old reactions cleaned up');
+  let MASTER_SCHEDULE = [];
+  let completions = [], records = [], role = null;
+
+  function start(r) {
+    role = r; localStorage.setItem('takken_role', r);
+    document.getElementById('role-screen').classList.add('hidden');
+    document.getElementById('app-screen').classList.remove('hidden');
+    document.getElementById('daily-maxim').textContent = MAXIMS[new Date().getDate() % MAXIMS.length];
+    buildSchedule();
+    loadData();
   }
 
-  // ★ 画像圧縮 (容量削減)
-  async function compressImage(file) {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width, height = img.height;
-          const maxSide = 500;
-          if (width > height) { if (width > maxSide) { height *= maxSide / width; width = maxSide; } }
-          else { if (height > maxSide) { width *= maxSide / height; height = maxSide; } }
-          canvas.width = width; canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', 0.6));
-        };
-      };
-    });
+  // 全スケジュールの構築
+  function buildSchedule() {
+    MASTER_SCHEDULE = [];
+    for (const [area, lessons] of Object.entries(RAW_START_DATES)) {
+      for (const [lesson, startStr] of Object.entries(lessons)) {
+        const baseDate = new Date(startStr);
+        const dateList = REVIEWS.map(offset => {
+          let d = new Date(baseDate);
+          d.setDate(d.getDate() + offset);
+          return d.toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'/');
+        });
+        MASTER_SCHEDULE.push({ area, lesson, dates: dateList });
+      }
+    }
   }
 
-  async function fetchAll() {
-    const [r1, r2, r3] = await Promise.all([
-      sb.from('records').select('*').order('created_at', { ascending: false }),
-      sb.from('reactions').select('*').order('created_at', { ascending: false }),
-      sb.from('activities').select('*').order('created_at', { ascending: false })
+  async function loadData() {
+    const [cData, rData] = await Promise.all([
+      sb.from('task_completions').select('*'),
+      sb.from('records').select('*').order('created_at', {ascending: false})
     ]);
-    records = r1.data || [];
-    reactions = r2.data || [];
-    activities = r3.data || [];
+    completions = cData.data || [];
+    records = rData.data || [];
     updateUI();
   }
 
   function updateUI() {
-    const today = getTodayStr();
+    const today = new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'/');
     const total = records.reduce((s, r) => s + parseFloat(r.hours), 0);
-    const rakkyoToday = records.filter(r => r.date === today).reduce((s, r) => s + parseFloat(r.hours), 0);
-    const maxim = MAXIMS[new Date().getDate() % MAXIMS.length];
-    ['maxim-rakkyo', 'maxim-saki'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).textContent = maxim; });
-    const diff = Math.ceil((EXAM_DATE - new Date().setHours(0,0,0,0)) / 86400000);
-    if(document.getElementById('days-num')) document.getElementById('days-num').textContent = diff;
-    const petEmoji = total >= 500 ? '🕊️' : total >= 300 ? '🐓' : total >= 150 ? '🐥' : total >= 50 ? '🐣' : '🥚';
-    if(document.getElementById('pet-rakkyo')) document.getElementById('pet-rakkyo').textContent = petEmoji;
+    
+    document.getElementById('total-h').textContent = total.toFixed(1);
+    document.getElementById('main-bar').style.width = Math.min(100, (total/600)*100) + '%';
+    const diff = Math.ceil((EXAM_DATE - new Date()) / 86400000);
+    document.getElementById('days-left').textContent = `試験日まであと ${diff} 日`;
 
-    if (currentRole === 'rakkyo') {
-      document.getElementById('total-hours').textContent = total.toFixed(1) + 'h';
-      document.getElementById('remain-hours').textContent = Math.max(0, TARGET_HOURS - total).toFixed(1) + 'h';
-      document.getElementById('today-hours').textContent = rakkyoToday.toFixed(1) + 'h';
-      document.getElementById('progress-fill').style.width = Math.min(100, (total/TARGET_HOURS)*100) + '%';
-      const sakiTodayH = activities.filter(a => a.date === today).reduce((s,a)=>s+parseFloat(a.hours),0);
-      document.getElementById('partner-stats-rakkyo').textContent = `今日は ${sakiTodayH.toFixed(1)}h の活動をしています`;
-      renderRakkyoStudyTab();
-      renderSakiRoomForRakkyo();
-    } else {
-      const pct = Math.min(100, (total/TARGET_HOURS)*100);
-      document.getElementById('rakkyo-status-for-saki').textContent = `現在 ${total.toFixed(1)}h (${pct.toFixed(1)}%)`;
-      document.getElementById('saki-progress-fill').style.width = pct + '%';
-      renderSakiSelfTab();
-      renderSakiWatchTab();
-    }
+    renderMissions(today);
+    renderAllProgress();
+    renderStudyHistory();
   }
 
-  // 保存系
-  async function saveRecord() {
-    const h = parseFloat(document.getElementById('manual-hours').value);
+  function renderMissions(today) {
+    const list = document.getElementById('mission-list');
+    let html = '';
+    let foundCount = 0;
+
+    MASTER_SCHEDULE.forEach(item => {
+      item.dates.forEach((d, idx) => {
+        if (d === today) {
+          foundCount++;
+          const taskId = `${item.area}-${item.lesson}-${idx}`;
+          const isDone = completions.some(c => c.task_id === taskId);
+          html += `
+            <div class="mission-item ${isDone?'done':''}">
+              <div>
+                <span class="tag ${idx===0?'tag-new':'tag-rev'}">${idx===0?'新規':'復習'+idx}</span>
+                <span class="mission-name">${item.area} ${item.lesson}</span>
+              </div>
+              <div class="check-circle ${isDone?'active':''}" onclick="completeTask('${taskId}', ${isDone})">
+                ${isDone?'✔':''}
+              </div>
+            </div>`;
+        }
+      });
+    });
+    list.innerHTML = html || '<p style="text-align:center; padding:20px; color:#aaa; font-size:12px;">今日の予定はありません。</p>';
+  }
+
+  async function completeTask(id, isAlreadyDone) {
+    if (isAlreadyDone) return;
+    await sb.from('task_completions').insert([{ task_id: id }]);
+    const h = prompt("この学習の時間は？(h)\n※0ならキャンセル", "0.5");
+    if (h && parseFloat(h) > 0) {
+      await sb.from('records').insert([{ date: new Date().toLocaleDateString('sv-SE'), hours: parseFloat(h) }]);
+    }
+    showToast("完了しました！");
+    loadData();
+  }
+
+  function renderAllProgress() {
+    const areaView = document.getElementById('full-progress-view');
+    const areas = ["宅建業法", "権利関係", "法令上の制限", "税・その他"];
+    let html = '';
+
+    areas.forEach(areaName => {
+      html += `<div class="area-section"><div class="area-title">${areaName}</div>`;
+      MASTER_SCHEDULE.filter(s => s.area === areaName).sort((a,b)=> parseInt(a.lesson.substring(1)) - parseInt(b.lesson.substring(1))).forEach(s => {
+        const steps = s.dates.map((d, idx) => {
+          const isDone = completions.some(c => c.task_id === `${s.area}-${s.lesson}-${idx}`);
+          return `<div class="step ${isDone?'done':''}">${idx===0?'新':idx}</div>`;
+        }).join('');
+        html += `<div class="lesson-row"><div class="lesson-label">${s.lesson}</div><div class="step-grid">${steps}</div></div>`;
+      });
+      html += `</div>`;
+    });
+    areaView.innerHTML = html;
+  }
+
+  function renderStudyHistory() {
+    const list = document.getElementById('study-history');
+    list.innerHTML = `<div class="card-title" style="margin-top:10px;">直近の履歴</div>` + records.slice(0, 5).map(r => `<div style="font-size:11px; display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #eee;"><span>${r.date}</span><span>${parseFloat(r.hours).toFixed(1)}h</span></div>`).join('');
+  }
+
+  async function addStudy() {
+    const h = parseFloat(document.getElementById('h-input').value);
     if (!h) return;
-    await sb.from('records').insert([{ date: getTodayStr(), hours: h }]);
-    document.getElementById('manual-hours').value = '';
-    showToast('記録しました！'); fetchAll();
+    await sb.from('records').insert([{ date: new Date().toLocaleDateString('sv-SE'), hours: h }]);
+    document.getElementById('h-input').value = '';
+    showToast("記録しました！"); loadData();
   }
 
-  async function saveSakiActivity() {
-    const menu = document.getElementById('saki-menu-input').value;
-    const h = parseFloat(document.getElementById('saki-h-input').value) || 0;
-    if (!menu) return showToast('メニューを入力してね');
-    await sb.from('activities').insert([{ who: 'saki', category: menu, date: getTodayStr(), hours: h }]);
-    document.getElementById('saki-menu-input').value = '';
-    document.getElementById('saki-h-input').value = '';
-    showToast('活動を記録したよ！'); fetchAll();
+  function switchTab(t, el) {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    el.classList.add('active');
+    ['mission','study','progress'].forEach(tab => document.getElementById('tab-'+tab).classList.add('hidden'));
+    document.getElementById('tab-' + t).classList.remove('hidden');
   }
 
-  function sendLine(type) {
-    const total = records.reduce((s, r) => s + parseFloat(r.hours), 0);
-    const day = Math.ceil((EXAM_DATE - new Date()) / 86400000);
-    let msg = type==='warn' ? `💢 らっきょ！サボり禁止！試験まであと${day}日。累計${total.toFixed(1)}hだよ！` : (type==='praise' ? `👏 らっきょ、すごい！頑張ってるね！累計${total.toFixed(1)}h！` : `💌 らっきょ、お疲れ様。応援してるよ！試験まであと${day}日！`);
-    window.open(`https://line.me/R/share?text=${encodeURIComponent(msg)}`);
+  function showToast(m) {
+    const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
   }
 
-  // 表示系
-  function renderRakkyoStudyTab() {
-    const list = document.getElementById('records-list');
-    list.innerHTML = records.slice(0, 10).map(r => `<div class="record-item"><div class="record-main"><span>${r.date.slice(5)} 勉強記録</span><span class="record-time">${parseFloat(r.hours).toFixed(1)}h</span><button class="record-delete" onclick="deleteItem('records','${r.id}')">×</button></div>${renderReactionList(r.id)}</div>`).join('');
-  }
-
-  function renderSakiRoomForRakkyo() {
-    const area = document.getElementById('saki-activity-for-rakkyo');
-    const sakiActs = activities.filter(a => a.who === 'saki');
-    if(sakiActs.length === 0) { area.innerHTML = '<div class="card-title">さきちゃんの活動はまだありません</div>'; return; }
-    area.innerHTML = `<div class="card-title">さきちゃんの活動記録</div>` + sakiActs.slice(0, 10).map(a => `<div class="action-card"><div class="action-header"><span>${a.date.slice(5)}</span><strong>✨ ${a.category} / ${parseFloat(a.hours).toFixed(1)}h</strong></div><div class="reaction-buttons">${['👏','🔥','💪','👀'].map(e => `<button class="react-btn" onclick="addEmoji('${a.id}','${e}')">${e}</button>`).join('')}</div>${renderReactionList(a.id)}${renderInteractionInput(a.id)}</div>`).join('');
-  }
-
-  function renderSakiSelfTab() {
-    const list = document.getElementById('saki-my-records');
-    const sakiActs = activities.filter(a => a.who === 'saki');
-    list.innerHTML = sakiActs.slice(0, 10).map(a => `<div class="action-card"><div class="action-header"><span>${a.date.slice(5)}</span><strong>${a.category} / ${parseFloat(a.hours).toFixed(1)}h</strong></div>${renderReactionList(a.id)}<div style="text-align:right"><button class="record-delete" onclick="deleteItem('activities','${a.id}')">消去</button></div></div>`).join('');
-  }
-
-  function renderSakiWatchTab() {
-    const area = document.getElementById('rakkyo-records-for-saki');
-    area.innerHTML = `<div class="card-title">らっきょの勉強記録</div>` + records.slice(0, 10).map(r => `<div class="action-card"><div class="action-header"><span>${r.date.slice(5)}</span><strong>勉強 / ${parseFloat(r.hours).toFixed(1)}h</strong></div><div class="reaction-buttons">${['👏','💪','📖','🔥'].map(e => `<button class="react-btn" onclick="addEmoji('${r.id}','${e}')">${e}</button>`).join('')}</div>${renderReactionList(r.id)}${renderInteractionInput(r.id)}</div>`).join('');
-  }
-
-  function renderInteractionInput(tid) {
-    return `<div class="msg-input-area"><input type="text" id="input-${tid}" class="msg-input" placeholder="コメントを送る..."><div style="display:flex; gap:8px;"><label style="flex:1; background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px; font-size:12px; text-align:center; cursor:pointer;">📷 写真<input type="file" accept="image/*" style="display:none" onchange="handlePhoto(event, '${tid}')"></label><button class="msg-send-btn" style="flex:2" onclick="sendComment('${tid}')">送信</button></div><div id="preview-${tid}"></div></div>`;
-  }
-
-  async function handlePhoto(e, tid) {
-    const file = e.target.files[0]; if(!file) return;
-    showToast('圧縮中...');
-    pendingPhoto[tid] = await compressImage(file);
-    document.getElementById(`preview-${tid}`).innerHTML = `<img src="${pendingPhoto[tid]}" class="photo-preview">`;
-    showToast('準備完了');
-  }
-
-  async function addEmoji(tid, emoji) {
-    await sb.from('reactions').insert([{ record_id: tid, emoji: emoji }]);
-    showToast(emoji + ' 送信'); fetchAll();
-  }
-
-  async function sendComment(tid) {
-    const val = document.getElementById(`input-${tid}`).value;
-    const photo = pendingPhoto[tid];
-    if(!val && !photo) return;
-    showToast('送信中...');
-    const { error } = await sb.from('reactions').insert([{ record_id: tid, message: val, photo_data: photo }]);
-    if(error) { showToast('エラー：写真が重すぎます'); console.error(error); }
-    else {
-      document.getElementById(`input-${tid}`).value = '';
-      document.getElementById(`preview-${tid}`).innerHTML = '';
-      delete pendingPhoto[tid];
-      showToast('送信完了！'); fetchAll();
-    }
-  }
-
-  function renderReactionList(tid) {
-    const filtered = reactions.filter(re => re.record_id === tid);
-    if(!filtered.length) return '';
-    return `<div class="record-reactions">${filtered.map(re => `<span class="reaction-chip">${re.emoji ? `<span class="reaction-emoji">${re.emoji}</span>` : '💬'}${re.message ? `<span>${re.message}</span>` : ''}${re.photo_data ? `<img src="${re.photo_data}" onclick="window.open(this.src)">` : ''}</span>`).join('')}</div>`;
-  }
-
-  function setRole(role) { currentRole = role; localStorage.setItem('takken_role', role); document.getElementById('mode-screen').classList.add('hidden'); document.getElementById(role + '-screen').classList.remove('hidden'); cleanupOldData(); fetchAll(); }
-  function switchRole() { if(confirm('切替えますか？')) { localStorage.removeItem('takken_role'); location.reload(); } }
-  function showTab(role, tab, el) { const root = document.getElementById(role + '-screen'); root.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); root.querySelectorAll('[id*="-tab-"]').forEach(d => d.classList.add('hidden')); document.getElementById(`${role}-tab-${tab}`).classList.remove('hidden'); }
-  async function deleteItem(table, id) { if(confirm('消去しますか？')) { await sb.from(table).delete().eq('id', id); fetchAll(); } }
-  function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
-
-  const savedRole = localStorage.getItem('takken_role');
-  if (savedRole) setRole(savedRole);
+  const saved = localStorage.getItem('takken_role');
+  if (saved) start(saved);
 </script>
 </body>
 </html>
